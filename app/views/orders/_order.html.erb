@@ -3,4 +3,14 @@
     <strong class="block font-medium mb-1">Total:</strong>
     <%= order.total %>
   </div>
+
+  <div>
+    <strong class="block font-medium mb-1">Receipt:</strong>
+    <% if order.receipt.attached? %>
+      <%= link_to order.receipt.filename, order.receipt, target: "_blank", class: "text-blue-600 hover:text-blue-500 underline" %>
+      <span class="text-gray-500 text-sm ml-2">(<%= number_to_human_size(order.receipt.blob.byte_size) %>)</span>
+    <% else %>
+      <span class="text-gray-500">No receipt attached</span>
+    <% end %>
+  </div>
 </div>
