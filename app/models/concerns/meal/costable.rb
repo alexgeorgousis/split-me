@@ -8,18 +8,14 @@ module Meal::Costable
 
     meal_ingredients.includes(:ingredient).each do |meal_ingredient|
       ingredient = meal_ingredient.ingredient
-      quantity_needed = meal_ingredient.quantity
 
-      # Find the best matching receipt item for this ingredient
+      # Find the matching receipt item for this ingredient
       matched_receipt_item = find_best_receipt_match(ingredient, order)
 
       next unless matched_receipt_item
 
-      # Calculate cost based on the proportion of ingredient used
-      item_unit_cost = matched_receipt_item.price / matched_receipt_item.quantity
-      ingredient_cost = item_unit_cost * quantity_needed
-
-      total_cost += ingredient_cost
+      # Add the full cost of the receipt item (quantity doesn't matter)
+      total_cost += matched_receipt_item.price * matched_receipt_item.quantity
     end
 
     total_cost.round(2)
@@ -32,26 +28,20 @@ module Meal::Costable
 
     meal_ingredients.includes(:ingredient).each do |meal_ingredient|
       ingredient = meal_ingredient.ingredient
-      quantity_needed = meal_ingredient.quantity
 
       matched_receipt_item = find_best_receipt_match(ingredient, order)
 
       if matched_receipt_item
-        item_unit_cost = matched_receipt_item.price / matched_receipt_item.quantity
-        ingredient_cost = item_unit_cost * quantity_needed
+        total_item_cost = matched_receipt_item.price * matched_receipt_item.quantity
 
         breakdown[ingredient.name] = {
-          quantity_needed: quantity_needed,
           matched_item: matched_receipt_item.name,
-          unit_cost: item_unit_cost.round(2),
-          total_cost: ingredient_cost.round(2),
+          total_cost: total_item_cost.round(2),
           confidence: find_match_confidence(ingredient, matched_receipt_item)
         }
       else
         breakdown[ingredient.name] = {
-          quantity_needed: quantity_needed,
           matched_item: nil,
-          unit_cost: 0.0,
           total_cost: 0.0,
           confidence: 0.0
         }

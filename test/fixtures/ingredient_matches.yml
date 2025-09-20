@@ -1,11 +1,11 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
+match_one:
   receipt_item: one
-  ingredient: one
-  confidence: 9.99
+  ingredient: tomato
+  confidence: 0.95
 
-two:
+match_two:
   receipt_item: two
-  ingredient: two
-  confidence: 9.99
+  ingredient: onion
+  confidence: 0.90

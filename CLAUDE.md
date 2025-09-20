@@ -1,2 +1,4 @@
-## Development Workflow
+- Always write automated tests and never commit code if the tests aren't passing
+- Run `bin/rails test` to ensure all tests pass before committing
 - After making changes, commit and push to the main branch with descriptive commit messages
+- Avoid using comments - write code that is self-explanatory instead

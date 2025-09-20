@@ -14,7 +14,6 @@ class OrdersTest < ApplicationSystemTestCase
     visit orders_url
     click_on "New order"
 
-    fill_in "Total", with: @order.total
     click_on "Create Order"
 
     assert_text "Order was successfully created"
@@ -25,7 +24,6 @@ class OrdersTest < ApplicationSystemTestCase
     visit order_url(@order)
     click_on "Edit this order", match: :first
 
-    fill_in "Total", with: @order.total
     click_on "Update Order"
 
     assert_text "Order was successfully updated"

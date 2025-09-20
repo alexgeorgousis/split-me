@@ -1,7 +1,11 @@
 <div id="<%= dom_id order %>" class="w-full sm:w-auto my-5 space-y-5">
   <div>
     <strong class="block font-medium mb-1">Total:</strong>
-    <%= order.total %>
+    <% if order.receipt_processed? %>
+      £<%= order.receipt_total_from_items %>
+    <% else %>
+      <span class="text-gray-500">Process receipt to calculate total</span>
+    <% end %>
   </div>
 
   <div>

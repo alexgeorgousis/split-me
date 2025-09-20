@@ -59,13 +59,25 @@ class OrdersController < ApplicationController
 
   # POST /orders/1/process_receipt
   def process_receipt
+    Rails.logger.info "Processing receipt for order #{@order.id}"
+
     if params[:auto_match]
       matches_count = @order.auto_match_all_ingredients!
       redirect_to review_receipt_order_path(@order), notice: "Auto-matched #{matches_count} ingredients!"
-    elsif @order.process_receipt!
-      redirect_to review_receipt_order_path(@order), notice: "Receipt processed successfully!"
     else
-      redirect_to @order, alert: "Failed to process receipt. Please check the file format."
+      Rails.logger.info "Starting receipt processing..."
+      begin
+        if @order.process_receipt!
+          Rails.logger.info "Receipt processed successfully"
+          redirect_to review_receipt_order_path(@order), notice: "Receipt processed successfully!"
+        else
+          Rails.logger.error "Receipt processing failed"
+          redirect_to @order, alert: "Failed to process receipt. Please check the file format."
+        end
+      rescue => e
+        Rails.logger.error "Exception during receipt processing: #{e.class} - #{e.message}"
+        redirect_to @order, alert: "Failed to process receipt: #{e.message}"
+      end
     end
   end
 
@@ -89,6 +101,6 @@ class OrdersController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def order_params
-      params.expect(order: [ :total, :receipt, meal_ids: [] ])
+      params.expect(order: [ :receipt, meal_ids: [] ])
     end
 end
