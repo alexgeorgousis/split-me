@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  receipt_item: one
+  ingredient: one
+  confidence: 9.99
+
+two:
+  receipt_item: two
+  ingredient: two
+  confidence: 9.99
