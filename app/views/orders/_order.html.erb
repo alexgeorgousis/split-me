@@ -26,4 +26,28 @@
       <span class="text-gray-500">No meals selected</span>
     <% end %>
   </div>
+
+  <div>
+    <strong class="block font-medium mb-1">Receipt Processing:</strong>
+    <% if order.receipt_processed? %>
+      <div class="space-y-2">
+        <p class="text-green-600">✓ Receipt processed (<%= order.receipt_items_count %> items found)</p>
+        <div class="flex space-x-2">
+          <%= link_to "Review Receipt Items", review_receipt_order_path(order), class: "px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-500 text-sm" %>
+          <% if order.bill_splitting_ready? %>
+            <%= link_to "View Bill Breakdown", bill_breakdown_order_path(order), class: "px-3 py-1 bg-green-600 text-white rounded hover:bg-green-500 text-sm" %>
+          <% else %>
+            <span class="px-3 py-1 bg-gray-300 text-gray-600 rounded text-sm">Bill breakdown not ready</span>
+          <% end %>
+        </div>
+      </div>
+    <% elsif order.receipt.attached? %>
+      <div class="space-y-2">
+        <p class="text-orange-600">⚠ Receipt uploaded but not processed</p>
+        <%= button_to "Process Receipt", process_receipt_order_path(order), method: :post, class: "px-3 py-1 bg-orange-600 text-white rounded hover:bg-orange-500 text-sm" %>
+      </div>
+    <% else %>
+      <span class="text-gray-500">No receipt uploaded</span>
+    <% end %>
+  </div>
 </div>

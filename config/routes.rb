@@ -1,6 +1,12 @@
 Rails.application.routes.draw do
   resources :ingredients
-  resources :orders
+  resources :orders do
+    member do
+      post :process_receipt
+      get :review_receipt
+      get :bill_breakdown
+    end
+  end
   resources :meals
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

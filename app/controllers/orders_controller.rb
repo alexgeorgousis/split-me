@@ -1,5 +1,5 @@
 class OrdersController < ApplicationController
-  before_action :set_order, only: %i[ show edit update destroy ]
+  before_action :set_order, only: %i[ show edit update destroy process_receipt review_receipt bill_breakdown ]
 
   # GET /orders or /orders.json
   def index
@@ -54,6 +54,30 @@ class OrdersController < ApplicationController
     respond_to do |format|
       format.html { redirect_to orders_path, notice: "Order was successfully destroyed.", status: :see_other }
       format.json { head :no_content }
+    end
+  end
+
+  # POST /orders/1/process_receipt
+  def process_receipt
+    if params[:auto_match]
+      matches_count = @order.auto_match_all_ingredients!
+      redirect_to review_receipt_order_path(@order), notice: "Auto-matched #{matches_count} ingredients!"
+    elsif @order.process_receipt!
+      redirect_to review_receipt_order_path(@order), notice: "Receipt processed successfully!"
+    else
+      redirect_to @order, alert: "Failed to process receipt. Please check the file format."
+    end
+  end
+
+  # GET /orders/1/review_receipt
+  def review_receipt
+    redirect_to @order, alert: "Receipt not processed yet." unless @order.receipt_processed?
+  end
+
+  # GET /orders/1/bill_breakdown
+  def bill_breakdown
+    unless @order.bill_splitting_ready?
+      redirect_to @order, alert: "Order is not ready for bill splitting. Please ensure receipt is processed and all meals have matched ingredients."
     end
   end
 

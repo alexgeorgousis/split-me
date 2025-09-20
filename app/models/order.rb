@@ -1,6 +1,7 @@
 class Order < ApplicationRecord
   include Receipt::Parsable
   include Receipt::Processable
+  include Order::Splittable
 
   has_and_belongs_to_many :meals
   has_one_attached :receipt
