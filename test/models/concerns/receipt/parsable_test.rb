@@ -18,11 +18,11 @@ class Receipt::ParsableTest < ActiveSupport::TestCase
     def call_claude_api(prompt)
       # Mock Claude API response for testing
       sample_response = [
-        {"name": "Herby Focaccia", "unit_price": 2.44, "quantity": 1},
-        {"name": "Cravendale Filtered Fresh Whole Milk", "unit_price": 1.40, "quantity": 1},
-        {"name": "Graze Flapjack Bars", "unit_price": 1.75, "quantity": 2},
-        {"name": "British Chicken", "unit_price": 4.25, "quantity": 1},
-        {"name": "Bananas", "unit_price": 0.30, "quantity": 3}
+        { "name": "Herby Focaccia", "unit_price": 2.44, "quantity": 1 },
+        { "name": "Cravendale Filtered Fresh Whole Milk", "unit_price": 1.40, "quantity": 1 },
+        { "name": "Graze Flapjack Bars", "unit_price": 1.75, "quantity": 2 },
+        { "name": "British Chicken", "unit_price": 4.25, "quantity": 1 },
+        { "name": "Bananas", "unit_price": 0.30, "quantity": 3 }
       ].to_json
 
       sample_response

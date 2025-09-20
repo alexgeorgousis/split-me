@@ -22,7 +22,7 @@ module Receipt::Parsable
         Rails.logger.info "PDF has #{reader.page_count} pages"
         return nil if reader.page_count == 0
 
-        pages_to_process = [reader.page_count, 3].min
+        pages_to_process = [ reader.page_count, 3 ].min
         Rails.logger.info "Processing first #{pages_to_process} pages..."
 
         text_content = reader.pages.first(pages_to_process).map.with_index do |page, index|
@@ -73,16 +73,16 @@ module Receipt::Parsable
 
     # Extract JSON from the response, handling potential markdown formatting
     json_text = api_response.strip
-    json_text = json_text.gsub(/^```json\s*/, '').gsub(/\s*```$/, '')
+    json_text = json_text.gsub(/^```json\s*/, "").gsub(/\s*```$/, "")
 
     parsed_items = JSON.parse(json_text)
 
     # Convert to the expected format with symbolized keys
     parsed_items.map do |item|
       {
-        name: item['name'],
-        price: item['unit_price'].to_f,
-        quantity: item['quantity'].to_i
+        name: item["name"],
+        price: item["unit_price"].to_f,
+        quantity: item["quantity"].to_i
       }
     end
   rescue JSON::ParserError => e
@@ -97,21 +97,21 @@ module Receipt::Parsable
   private
 
   def call_claude_api(prompt)
-    uri = URI('https://api.anthropic.com/v1/messages')
+    uri = URI("https://api.anthropic.com/v1/messages")
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = true
 
     request = Net::HTTP::Post.new(uri)
-    request['Content-Type'] = 'application/json'
-    request['x-api-key'] = ENV['ANTHROPIC_API_KEY']
-    request['anthropic-version'] = '2023-06-01'
+    request["Content-Type"] = "application/json"
+    request["x-api-key"] = ENV["ANTHROPIC_API_KEY"]
+    request["anthropic-version"] = "2023-06-01"
 
     request.body = JSON.generate({
-      model: 'claude-3-haiku-20240307',
+      model: "claude-3-haiku-20240307",
       max_tokens: 1000,
       messages: [
         {
-          role: 'user',
+          role: "user",
           content: prompt
         }
       ]
@@ -119,9 +119,9 @@ module Receipt::Parsable
 
     response = http.request(request)
 
-    if response.code == '200'
+    if response.code == "200"
       result = JSON.parse(response.body)
-      result.dig('content', 0, 'text')
+      result.dig("content", 0, "text")
     else
       Rails.logger.error "Claude API error: #{response.code} #{response.body}"
       nil

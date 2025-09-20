@@ -35,7 +35,7 @@ module Ingredient::Matchable
 
     def extract_words(text)
       text.downcase
-          .gsub(/[^\w\s]/, ' ')
+          .gsub(/[^\w\s]/, " ")
           .split
           .reject(&:blank?)
     end
