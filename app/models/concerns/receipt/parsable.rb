@@ -3,15 +3,25 @@ module Receipt::Parsable
 
   included do
     require 'pdf-reader'
+    require 'timeout'
   end
 
   def extract_text_from_receipt
     return nil unless receipt.attached?
 
-    receipt.blob.open do |file|
-      reader = PDF::Reader.new(file)
-      reader.pages.map(&:text).join("\n")
+    Timeout.timeout(30) do
+      receipt.blob.open do |file|
+        reader = PDF::Reader.new(file)
+        text_pages = reader.pages.first(5).map(&:text)
+        text_pages.join("\n")
+      end
     end
+  rescue Timeout::Error
+    Rails.logger.error "PDF processing timed out after 30 seconds"
+    nil
+  rescue PDF::Reader::MalformedPDFError, PDF::Reader::UnsupportedFeatureError => e
+    Rails.logger.error "PDF format error: #{e.message}"
+    nil
   rescue => e
     Rails.logger.error "Failed to extract text from receipt: #{e.message}"
     nil
