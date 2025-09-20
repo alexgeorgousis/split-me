@@ -2,7 +2,7 @@ require "application_system_test_case"
 
 class IngredientsTest < ApplicationSystemTestCase
   setup do
-    @ingredient = ingredients(:one)
+    @ingredient = ingredients(:tomato)
   end
 
   test "visiting the index" do
