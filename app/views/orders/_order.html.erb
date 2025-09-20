@@ -13,4 +13,17 @@
       <span class="text-gray-500">No receipt attached</span>
     <% end %>
   </div>
+
+  <div>
+    <strong class="block font-medium mb-1">Meals:</strong>
+    <% if order.meals.any? %>
+      <ul class="list-disc list-inside text-gray-700">
+        <% order.meals.each do |meal| %>
+          <li><%= link_to meal.name, meal_path(meal), class: "text-blue-600 hover:text-blue-500 underline" %></li>
+        <% end %>
+      </ul>
+    <% else %>
+      <span class="text-gray-500">No meals selected</span>
+    <% end %>
+  </div>
 </div>

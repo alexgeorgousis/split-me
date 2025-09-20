@@ -21,6 +21,18 @@
     <%= form.file_field :receipt, accept: "application/pdf", class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": order.errors[:receipt].none?, "border-red-400 focus:outline-red-600": order.errors[:receipt].any?}] %>
   </div>
 
+  <div class="my-5">
+    <%= form.label :meals, class: "block font-medium mb-2" %>
+    <div class="space-y-2">
+      <%= form.collection_check_boxes :meal_ids, Meal.all, :id, :name do |b| %>
+        <div class="flex items-center">
+          <%= b.check_box(class: "rounded border-gray-300 text-blue-600 focus:ring-blue-500 mr-2") %>
+          <%= b.label(class: "text-gray-700") %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
   <div class="inline">
     <%= form.submit class: "w-full sm:w-auto rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white inline-block font-medium cursor-pointer" %>
   </div>
