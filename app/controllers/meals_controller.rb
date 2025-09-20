@@ -13,10 +13,12 @@ class MealsController < ApplicationController
   # GET /meals/new
   def new
     @meal = Meal.new
+    @meal.meal_ingredients.build
   end
 
   # GET /meals/1/edit
   def edit
+    @meal.meal_ingredients.build if @meal.meal_ingredients.empty?
   end
 
   # POST /meals or /meals.json
@@ -65,6 +67,6 @@ class MealsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def meal_params
-      params.expect(meal: [ :name ])
+      params.require(:meal).permit(:name, meal_ingredients_attributes: [ :id, :ingredient_id, :quantity, :_destroy ])
     end
 end

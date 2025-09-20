@@ -1,4 +1,4 @@
-## Development Workflow
+- Always write automated tests and never commit code if the tests aren't passing
+- Run `bin/rails test` to ensure all tests pass before committing
 - After making changes, commit and push to the main branch with descriptive commit messages
-- Use `bin/dev` to start the development server (runs Rails + Tailwind CSS watcher)
-- Don't add inline comments - code should be self-explanatory through clear naming and structure
+- Avoid using comments - write code that is self-explanatory instead

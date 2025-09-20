@@ -1,0 +1,115 @@
+<% content_for :title, "Bill Breakdown - Order ##{@order.id}" %>
+
+<div class="md:w-4/5 w-full">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="font-bold text-4xl">Bill Breakdown</h1>
+    <div class="space-x-2">
+      <%= link_to "Review Receipt", review_receipt_order_path(@order), class: "px-4 py-2 bg-blue-100 hover:bg-blue-50 rounded-md font-medium" %>
+      <%= link_to "Back to Order", @order, class: "px-4 py-2 bg-gray-100 hover:bg-gray-50 rounded-md font-medium" %>
+    </div>
+  </div>
+
+  <% split_summary = @order.split_summary %>
+
+  <!-- Summary Card -->
+  <div class="mb-8 p-6 bg-gradient-to-r from-blue-50 to-green-50 rounded-lg border">
+    <h2 class="font-bold text-xl mb-4">Summary</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div class="text-center">
+        <div class="text-2xl font-bold text-gray-800">£<%= split_summary[:receipt_total] %></div>
+        <div class="text-sm text-gray-600">Total Receipt</div>
+      </div>
+      <div class="text-center">
+        <div class="text-2xl font-bold text-green-600">£<%= split_summary[:total_accounted] %></div>
+        <div class="text-sm text-gray-600">Your Meals</div>
+      </div>
+      <div class="text-center">
+        <div class="text-2xl font-bold <%= split_summary[:unaccounted] > 0 ? 'text-orange-600' : 'text-gray-600' %>">
+          £<%= split_summary[:unaccounted] %>
+        </div>
+        <div class="text-sm text-gray-600">Unaccounted</div>
+      </div>
+    </div>
+    <div class="mt-4 text-center">
+      <div class="text-lg">
+        <span class="text-gray-600">Coverage: </span>
+        <span class="font-semibold <%= split_summary[:coverage_percentage] >= 90 ? 'text-green-600' : 'text-orange-600' %>">
+          <%= split_summary[:coverage_percentage] %>%
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Meal Breakdown -->
+  <div class="space-y-6">
+    <h2 class="font-bold text-xl">Meal Costs</h2>
+
+    <% split_summary[:meal_costs].each do |meal_id, meal_data| %>
+      <% meal = meal_data[:meal] %>
+      <% cost = meal_data[:cost] %>
+      <% breakdown = meal_data[:breakdown] %>
+
+      <div class="border rounded-lg p-6 bg-white shadow-sm">
+        <div class="flex justify-between items-start mb-4">
+          <div>
+            <h3 class="font-semibold text-lg">
+              <%= link_to meal.name, meal_path(meal), class: "text-blue-600 hover:text-blue-500" %>
+            </h3>
+            <p class="text-2xl font-bold text-green-600">£<%= cost %></p>
+          </div>
+        </div>
+
+        <% if breakdown.any? %>
+          <div class="mt-4">
+            <h4 class="font-medium mb-2">Ingredient Breakdown:</h4>
+            <div class="space-y-2">
+              <% breakdown.each do |ingredient_name, details| %>
+                <div class="flex justify-between items-center py-2 px-3 bg-gray-50 rounded">
+                  <div class="flex-1">
+                    <span class="font-medium"><%= ingredient_name %></span>
+                  </div>
+                  <div class="text-right">
+                    <% if details[:matched_item] %>
+                      <div class="text-sm text-gray-600">
+                        Matched to: <%= details[:matched_item] %>
+                      </div>
+                      <div class="font-medium">£<%= details[:total_cost] %></div>
+                    <% else %>
+                      <div class="text-orange-600 text-sm">No match found</div>
+                      <div class="font-medium">£0.00</div>
+                    <% end %>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        <% else %>
+          <p class="text-gray-500 italic">No ingredients in this meal</p>
+        <% end %>
+      </div>
+    <% end %>
+
+    <% if split_summary[:meal_costs].empty? %>
+      <div class="text-center py-8 text-gray-500">
+        <p>No meals selected for this order.</p>
+        <%= link_to "Add meals to this order", edit_order_path(@order), class: "text-blue-600 hover:text-blue-500 underline" %>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- Action Buttons -->
+  <div class="mt-8 flex justify-center space-x-4">
+    <%= link_to "Edit Order", edit_order_path(@order), class: "px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-500 font-medium" %>
+    <%= link_to "Review Receipt Items", review_receipt_order_path(@order), class: "px-6 py-3 bg-gray-600 text-white rounded-md hover:bg-gray-500 font-medium" %>
+  </div>
+
+  <!-- Notes -->
+  <div class="mt-8 p-4 bg-yellow-50 border border-yellow-200 rounded-md">
+    <h3 class="font-semibold text-yellow-800 mb-2">Notes:</h3>
+    <ul class="text-sm text-yellow-700 space-y-1">
+      <li>• Costs are calculated based on ingredient matching with receipt items</li>
+      <li>• Higher confidence matches provide more accurate cost calculations</li>
+      <li>• Unaccounted amounts may include items not in any meals (drinks, snacks, etc.)</li>
+    </ul>
+  </div>
+</div>
