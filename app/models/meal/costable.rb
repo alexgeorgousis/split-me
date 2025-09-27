@@ -14,8 +14,8 @@ module Meal::Costable
 
       next unless matched_receipt_item
 
-      # Add the full cost of the receipt item (quantity doesn't matter)
-      total_cost += matched_receipt_item.price * matched_receipt_item.quantity
+      # Add the full cost of the receipt item
+      total_cost += matched_receipt_item.price
     end
 
     total_cost.round(2)
@@ -32,11 +32,9 @@ module Meal::Costable
       matched_receipt_item = find_best_receipt_match(ingredient, order)
 
       if matched_receipt_item
-        total_item_cost = matched_receipt_item.price * matched_receipt_item.quantity
-
         breakdown[ingredient.name] = {
           matched_item: matched_receipt_item.name,
-          total_cost: total_item_cost.round(2),
+          total_cost: matched_receipt_item.price.round(2),
           confidence: find_match_confidence(ingredient, matched_receipt_item)
         }
       else
@@ -71,9 +69,11 @@ module Meal::Costable
 
   def find_best_receipt_match(ingredient, order)
     # Find the best matching receipt item through ingredient matches
+    # Only consider selected receipt items
     best_match = ingredient.ingredient_matches
-                          .joins(:receipt_item)
-                          .where(receipt_items: { order: order })
+                          .joins(receipt_item: :receipt)
+                          .where(receipts: { order: order })
+                          .where(receipt_items: { selected: true })
                           .order(confidence: :desc)
                           .first
 

@@ -1,7 +1,7 @@
 <div id="<%= dom_id order %>" class="w-full sm:w-auto my-5 space-y-5">
   <div>
     <strong class="block font-medium mb-1">Total:</strong>
-    <% if order.receipt_processed? %>
+    <% if order.receipt && order.receipt.processed? %>
       £<%= order.receipt_total_from_items %>
     <% else %>
       <span class="text-gray-500">Process receipt to calculate total</span>
@@ -10,8 +10,8 @@
 
   <div>
     <strong class="block font-medium mb-1">Receipt:</strong>
-    <% if order.receipt.attached? %>
-      <%= link_to order.receipt.filename, order.receipt, target: "_blank", class: "text-blue-600 hover:text-blue-500 underline" %>
+    <% if order.receipt && order.receipt.attached? %>
+      <%= link_to order.receipt.filename, order.receipt.file, target: "_blank", class: "text-blue-600 hover:text-blue-500 underline" %>
       <span class="text-gray-500 text-sm ml-2">(<%= number_to_human_size(order.receipt.blob.byte_size) %>)</span>
     <% else %>
       <span class="text-gray-500">No receipt attached</span>
@@ -33,19 +33,12 @@
 
   <div>
     <strong class="block font-medium mb-1">Receipt Processing:</strong>
-    <% if order.receipt_processed? %>
+    <% if order.receipt && order.receipt.processed? %>
       <div class="space-y-2">
         <p class="text-green-600">✓ Receipt processed (<%= order.receipt_items_count %> items found)</p>
-        <div class="flex space-x-2">
-          <%= link_to "Review Receipt Items", review_receipt_order_path(order), class: "px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-500 text-sm" %>
-          <% if order.bill_splitting_ready? %>
-            <%= link_to "View Bill Breakdown", bill_breakdown_order_path(order), class: "px-3 py-1 bg-green-600 text-white rounded hover:bg-green-500 text-sm" %>
-          <% else %>
-            <span class="px-3 py-1 bg-gray-300 text-gray-600 rounded text-sm">Bill breakdown not ready</span>
-          <% end %>
-        </div>
+        <%= link_to "View Bill Breakdown", bill_breakdown_order_path(order), class: "px-3 py-1 bg-green-600 text-white rounded hover:bg-green-500 text-sm" %>
       </div>
-    <% elsif order.receipt.attached? %>
+    <% elsif order.receipt && order.receipt.attached? %>
       <div class="space-y-2">
         <p class="text-orange-600">⚠ Receipt uploaded but not processed</p>
         <%= button_to "Process Receipt", process_receipt_order_path(order), method: :post, class: "px-3 py-1 bg-orange-600 text-white rounded hover:bg-orange-500 text-sm" %>

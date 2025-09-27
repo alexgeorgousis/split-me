@@ -13,7 +13,9 @@
 
   <div class="my-5">
     <%= form.label :receipt %>
-    <%= form.file_field :receipt, accept: "application/pdf", class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": order.errors[:receipt].none?, "border-red-400 focus:outline-red-600": order.errors[:receipt].any?}] %>
+    <%= form.fields_for :receipt do |receipt_form| %>
+      <%= receipt_form.file_field :file, accept: "application/pdf", class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": order.errors[:receipt].none?, "border-red-400 focus:outline-red-600": order.errors[:receipt].any?}] %>
+    <% end %>
   </div>
 
   <div class="my-5">

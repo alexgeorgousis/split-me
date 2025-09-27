@@ -53,7 +53,7 @@ module Ingredient::Matchable
 
   def total_matched_price
     ingredient_matches.includes(:receipt_item).sum do |match|
-      match.receipt_item.price * match.receipt_item.quantity
+      match.receipt_item.price
     end
   end
 end

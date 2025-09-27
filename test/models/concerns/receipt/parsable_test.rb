@@ -18,11 +18,11 @@ class Receipt::ParsableTest < ActiveSupport::TestCase
     def call_claude_api(prompt)
       # Mock Claude API response for testing
       sample_response = [
-        { "name": "Herby Focaccia", "unit_price": 2.44, "quantity": 1 },
-        { "name": "Cravendale Filtered Fresh Whole Milk", "unit_price": 1.40, "quantity": 1 },
-        { "name": "Graze Flapjack Bars", "unit_price": 1.75, "quantity": 2 },
-        { "name": "British Chicken", "unit_price": 4.25, "quantity": 1 },
-        { "name": "Bananas", "unit_price": 0.30, "quantity": 3 }
+        { "name": "Herby Focaccia", "price": 2.44 },
+        { "name": "Cravendale Filtered Fresh Whole Milk", "price": 1.40 },
+        { "name": "Graze Flapjack Bars", "price": 3.50 },
+        { "name": "British Chicken", "price": 4.25 },
+        { "name": "Bananas", "price": 0.90 }
       ].to_json
 
       sample_response
@@ -93,20 +93,17 @@ class Receipt::ParsableTest < ActiveSupport::TestCase
     focaccia = items.find { |item| item[:name].include?("Focaccia") }
     assert_not_nil focaccia, "Should find Focaccia item"
     assert_equal 2.44, focaccia[:price]
-    assert_equal 1, focaccia[:quantity]
 
     milk = items.find { |item| item[:name].include?("Milk") }
     assert_not_nil milk, "Should find Milk item"
     assert_equal 1.40, milk[:price]
-    assert_equal 1, milk[:quantity]
 
     flapjack = items.find { |item| item[:name].include?("Flapjack") }
     assert_not_nil flapjack, "Should find Flapjack item"
-    assert_equal 1.75, flapjack[:price]  # Unit price, not total
-    assert_equal 2, flapjack[:quantity]
+    assert_equal 3.50, flapjack[:price]
   end
 
-  test "parse_sainsburys_items handles quantity extraction" do
+  test "parse_sainsburys_items handles total price extraction" do
     text = "3 Bananas                                                        £0.90"
     items = @model.parse_sainsburys_items(text)
 
@@ -114,8 +111,7 @@ class Receipt::ParsableTest < ActiveSupport::TestCase
     assert_equal 5, items.length
     bananas = items.find { |item| item[:name].include?("Bananas") }
     assert_not_nil bananas
-    assert_equal 0.30, bananas[:price]  # Unit price from mock
-    assert_equal 3, bananas[:quantity]
+    assert_equal 0.90, bananas[:price]  # Total price from mock
   end
 
   test "parse_sainsburys_items skips header and footer lines" do

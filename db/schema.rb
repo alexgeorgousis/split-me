@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_20_084527) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_27_190731) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -58,7 +58,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_20_084527) do
   create_table "meal_ingredients", force: :cascade do |t|
     t.integer "meal_id", null: false
     t.integer "ingredient_id", null: false
-    t.decimal "quantity"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["ingredient_id"], name: "index_meal_ingredients_on_ingredient_id"
@@ -74,6 +73,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_20_084527) do
   create_table "meals_orders", id: false, force: :cascade do |t|
     t.integer "order_id", null: false
     t.integer "meal_id", null: false
+    t.index ["meal_id"], name: "index_meals_orders_on_meal_id"
+    t.index ["order_id"], name: "index_meals_orders_on_order_id"
   end
 
   create_table "orders", force: :cascade do |t|
@@ -85,11 +86,18 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_20_084527) do
   create_table "receipt_items", force: :cascade do |t|
     t.string "name"
     t.decimal "price"
-    t.decimal "quantity"
+    t.integer "receipt_id", null: false
+    t.boolean "selected", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["receipt_id"], name: "index_receipt_items_on_receipt_id"
+  end
+
+  create_table "receipts", force: :cascade do |t|
     t.integer "order_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["order_id"], name: "index_receipt_items_on_order_id"
+    t.index ["order_id"], name: "index_receipts_on_order_id"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
@@ -98,5 +106,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_20_084527) do
   add_foreign_key "ingredient_matches", "receipt_items"
   add_foreign_key "meal_ingredients", "ingredients"
   add_foreign_key "meal_ingredients", "meals"
-  add_foreign_key "receipt_items", "orders"
+  add_foreign_key "receipt_items", "receipts"
+  add_foreign_key "receipts", "orders"
 end

@@ -2,9 +2,13 @@ Rails.application.routes.draw do
   resources :ingredients
   resources :orders do
     member do
-      post :process_receipt
-      get :review_receipt
       get :bill_breakdown
+      post :process_receipt
+    end
+    resources :receipt_items, only: [] do
+      member do
+        patch :toggle_selection
+      end
     end
   end
   resources :meals

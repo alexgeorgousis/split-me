@@ -1,9 +1,14 @@
 class Order < ApplicationRecord
-  include Receipt::Parsable
-  include Receipt::Processable
-  include Order::Splittable
+  include Splittable
 
   has_and_belongs_to_many :meals
-  has_one_attached :receipt
-  has_many :receipt_items, dependent: :destroy
+  has_one :receipt, dependent: :destroy
+  accepts_nested_attributes_for :receipt, allow_destroy: true
+
+  delegate :processed?, to: :receipt, prefix: true, allow_nil: true
+  delegate :receipt_total_from_items, :receipt_items_count, :process_receipt!, to: :receipt, allow_nil: true
+
+  def receipt_items
+    receipt&.receipt_items || ReceiptItem.none
+  end
 end

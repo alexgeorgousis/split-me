@@ -3,11 +3,9 @@
 one:
   name: MyString
   price: 9.99
-  quantity: 9.99
-  order: one
+  receipt: one
 
 two:
   name: MyString
   price: 9.99
-  quantity: 9.99
-  order: two
+  receipt: two

@@ -3,9 +3,7 @@
 pasta_tomato:
   meal: pasta
   ingredient: tomato
-  quantity: 2
 
 pizza_cheese:
   meal: pizza
   ingredient: cheese
-  quantity: 1

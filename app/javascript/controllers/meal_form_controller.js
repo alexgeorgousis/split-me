@@ -41,11 +41,6 @@ export default class extends Controller {
       }
     })
 
-    // Set quantity default
-    const quantityInput = newIngredient.querySelector("input[type='number']")
-    if (quantityInput) {
-      quantityInput.value = "1"
-    }
 
     // Append to container
     container.appendChild(newIngredient)

@@ -11,7 +11,6 @@
         <% meal.meal_ingredients.includes(:ingredient).each do |meal_ingredient| %>
           <li>
             <%= link_to meal_ingredient.ingredient.name, ingredient_path(meal_ingredient.ingredient), class: "text-blue-600 hover:text-blue-500 underline" %>
-            <span class="text-gray-500">- Quantity: <%= meal_ingredient.quantity %></span>
           </li>
         <% end %>
       </ul>

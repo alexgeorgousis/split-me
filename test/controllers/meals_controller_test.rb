@@ -50,12 +50,10 @@ class MealsControllerTest < ActionDispatch::IntegrationTest
           name: "Updated Pasta",
           meal_ingredients_attributes: {
             "0" => {
-              ingredient_id: @onion.id,
-              quantity: 2
+              ingredient_id: @onion.id
             },
             "1" => {
-              ingredient_id: @cheese.id,
-              quantity: 1
+              ingredient_id: @cheese.id
             }
           }
         }
@@ -72,7 +70,7 @@ class MealsControllerTest < ActionDispatch::IntegrationTest
 
   test "should update meal and remove existing ingredients" do
     @meal.meal_ingredients.destroy_all
-    meal_ingredient = @meal.meal_ingredients.create!(ingredient: @onion, quantity: 1)
+    meal_ingredient = @meal.meal_ingredients.create!(ingredient: @onion)
 
     assert_difference("MealIngredient.count", -1) do
       patch meal_url(@meal), params: {
@@ -82,7 +80,6 @@ class MealsControllerTest < ActionDispatch::IntegrationTest
             "0" => {
               id: meal_ingredient.id,
               ingredient_id: meal_ingredient.ingredient_id,
-              quantity: meal_ingredient.quantity,
               _destroy: "1"
             }
           }

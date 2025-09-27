@@ -2,7 +2,7 @@ module Order::Splittable
   extend ActiveSupport::Concern
 
   def calculate_meal_costs
-    return {} unless receipt_processed? && meals.any?
+    return {} unless receipt.processed? && meals.any?
 
     meal_costs = {}
 
@@ -23,26 +23,25 @@ module Order::Splittable
   end
 
   def unaccounted_cost
-    receipt_total = receipt_total_from_items
+    receipt_total = selected_receipt_total
     meal_total = total_meal_costs
 
     (receipt_total - meal_total).round(2)
   end
 
   def cost_coverage_percentage
-    return 0.0 unless receipt_total_from_items > 0
+    return 0.0 unless selected_receipt_total > 0
 
-    coverage = (total_meal_costs / receipt_total_from_items) * 100
+    coverage = (total_meal_costs / selected_receipt_total) * 100
     coverage.round(1)
   end
 
   def auto_match_all_ingredients!
-    return false unless receipt_processed?
+    return false unless receipt.processed?
 
     success_count = 0
 
     receipt_items.each do |receipt_item|
-      # Only try to match if not already matched
       next if receipt_item.ingredient_matches.any?
 
       match = Ingredient.auto_match_receipt_item!(receipt_item)
@@ -53,7 +52,7 @@ module Order::Splittable
   end
 
   def matching_summary
-    return {} unless receipt_processed?
+    return {} unless receipt.processed?
 
     total_items = receipt_items.count
     matched_items = receipt_items.joins(:ingredient_matches).distinct.count
@@ -68,16 +67,14 @@ module Order::Splittable
   end
 
   def bill_splitting_ready?
-    receipt_processed? &&
-    meals.any? &&
-    meals.all? { |meal| meal.has_all_ingredients_matched?(self) }
+    receipt.processed? && meals.any?
   end
 
   def split_summary
     return {} unless bill_splitting_ready?
 
     meal_costs = calculate_meal_costs
-    total_receipt = receipt_total_from_items
+    total_receipt = selected_receipt_total
 
     {
       receipt_total: total_receipt,
@@ -86,5 +83,9 @@ module Order::Splittable
       unaccounted: unaccounted_cost,
       coverage_percentage: cost_coverage_percentage
     }
+  end
+
+  def selected_receipt_total
+    receipt_items.where(selected: true).sum(:price)
   end
 end

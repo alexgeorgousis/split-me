@@ -4,7 +4,7 @@ Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
   # Allow ngrok host
-  config.hosts << "2e2fec004f2f.ngrok-free.app"
+  config.hosts << "e3126e7bcfc0.ngrok-free.app"
 
   # Make code changes take effect immediately without server restart.
   config.enable_reloading = true

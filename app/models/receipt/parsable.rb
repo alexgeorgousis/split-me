@@ -9,15 +9,15 @@ module Receipt::Parsable
   end
 
   def extract_text_from_receipt
-    return nil unless receipt.attached?
+    return nil unless file.attached?
 
     Rails.logger.info "Starting PDF text extraction for receipt"
 
     begin
       Rails.logger.info "Opening PDF file..."
-      receipt.blob.open do |file|
+      file.blob.open do |pdf_file|
         Rails.logger.info "Creating PDF reader..."
-        reader = PDF::Reader.new(file)
+        reader = PDF::Reader.new(pdf_file)
 
         Rails.logger.info "PDF has #{reader.page_count} pages"
         return nil if reader.page_count == 0
@@ -51,13 +51,12 @@ module Receipt::Parsable
 
       For each grocery item, provide:
       - name: Clean product name (remove "Sainsbury's", "Own Brand", "Taste the Difference", etc.)
-      - unit_price: Price per individual item (divide total price by quantity if needed)
-      - quantity: Number of items purchased
+      - price: Total price for this line item exactly as shown on receipt
 
       Rules:
       - Skip headers, footers, store info, payment details, and promotional text
       - Skip substitution explanations and "substituted with" lines
-      - For lines like "5 Greek Yogurt £5.50", this means 5 items for £5.50 total, so unit_price = 1.10
+      - Use the total price shown for each line (e.g., for "5 Greek Yogurt £5.50", use 5.50 as the price)
       - Only include actual grocery products that were purchased
       - Clean product names by removing store branding
 
@@ -65,26 +64,46 @@ module Receipt::Parsable
       #{text}
 
       Return only a valid JSON array with no other text:
-      [{"name": "Product Name", "unit_price": 1.23, "quantity": 2}]
+      [{"name": "Product Name", "price": 5.50}]
     PROMPT
 
     api_response = call_claude_api(prompt)
+    Rails.logger.info "API response received: #{api_response.present? ? 'YES' : 'NO'}"
     return [] unless api_response
 
-    # Extract JSON from the response, handling potential markdown formatting
+    # Extract JSON from the response, handling potential markdown formatting and explanatory text
     json_text = api_response.strip
     json_text = json_text.gsub(/^```json\s*/, "").gsub(/\s*```$/, "")
 
+    # Find the first '[' and extract JSON from there
+    json_start = json_text.index("[")
+    if json_start
+      json_text = json_text[json_start..-1]
+    end
+
+    Rails.logger.info "JSON text after cleanup: #{json_text[0..200]}..."
+
     parsed_items = JSON.parse(json_text)
+    Rails.logger.info "Parsed #{parsed_items.length} items from JSON"
 
     # Convert to the expected format with symbolized keys
-    parsed_items.map do |item|
+    result = parsed_items.map do |item|
+      # Handle both old format (unit_price + quantity) and new format (price)
+      price = if item["price"]
+        item["price"].to_f
+      elsif item["unit_price"] && item["quantity"]
+        item["unit_price"].to_f * item["quantity"].to_i
+      else
+        0.0
+      end
+
       {
         name: item["name"],
-        price: item["unit_price"].to_f,
-        quantity: item["quantity"].to_i
+        price: price
       }
     end
+    Rails.logger.info "Converted to final format: #{result.length} items"
+    result
   rescue JSON::ParserError => e
     Rails.logger.error "Failed to parse Claude API JSON response: #{e.message}"
     Rails.logger.error "Response was: #{api_response}"
@@ -108,7 +127,7 @@ module Receipt::Parsable
 
     request.body = JSON.generate({
       model: "claude-3-haiku-20240307",
-      max_tokens: 1000,
+      max_tokens: 4000,
       messages: [
         {
           role: "user",

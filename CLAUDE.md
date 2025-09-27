@@ -1,4 +1,5 @@
-- Always write automated tests and never commit code if the tests aren't passing
-- Run `bin/rails test` to ensure all tests pass before committing
-- After making changes, commit and push to the main branch with descriptive commit messages
-- Avoid using comments - write code that is self-explanatory instead
+ALWAYS write as LITTLE CODE as possible to accomplish the task.
+ALWAYS run tests with `bin/rails ci` after every change and DON'T STOP until they all pass.
+
+NEVER write comments.
+NEVER DEVIATE from the instructions in this file.
