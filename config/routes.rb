@@ -2,7 +2,6 @@ Rails.application.routes.draw do
   resources :ingredients
   resources :orders do
     member do
-      get :bill_breakdown
       post :process_receipt
       patch :batch_update_receipt_items
     end

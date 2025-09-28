@@ -1,5 +1,5 @@
 class OrdersController < ApplicationController
-  before_action :set_order, only: %i[ show edit update destroy bill_breakdown process_receipt batch_update_receipt_items ]
+  before_action :set_order, only: %i[ show edit update destroy process_receipt batch_update_receipt_items ]
 
   def index
     @orders = Order.all
@@ -18,50 +18,29 @@ class OrdersController < ApplicationController
   def create
     @order = Order.new(order_params)
 
-    respond_to do |format|
-      if @order.save
-        format.html { redirect_to orders_path, notice: "Order was successfully created." }
-        format.json { render :show, status: :created, location: @order }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @order.errors, status: :unprocessable_entity }
-      end
+    if @order.save
+      redirect_to orders_path, notice: "Order was successfully created."
+    else
+      render :new, status: :unprocessable_entity
     end
   end
 
   def update
-    respond_to do |format|
-      if @order.update(order_params)
-        format.html { redirect_to @order, notice: "Order was successfully updated.", status: :see_other }
-        format.json { render :show, status: :ok, location: @order }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @order.errors, status: :unprocessable_entity }
-      end
+    if @order.update(order_params)
+      redirect_to orders_path, notice: "Order was successfully updated.", status: :see_other
+    else
+      render :edit, status: :unprocessable_entity
     end
   end
 
   def destroy
     @order.destroy!
-
-    respond_to do |format|
-      format.html { redirect_to orders_path, notice: "Order was successfully destroyed.", status: :see_other }
-      format.json { head :no_content }
-    end
-  end
-
-  def bill_breakdown
-    unless @order.receipt.processed?
-      redirect_to @order, alert: "Receipt not processed yet."
-    end
+    redirect_to orders_path, notice: "Order was successfully destroyed.", status: :see_other
   end
 
   def process_receipt
-    if @order.process_receipt!
-      redirect_to bill_breakdown_order_path(@order), notice: "Receipt processed successfully!"
-    else
-      redirect_to @order, alert: "Failed to process receipt. Please check the file format."
-    end
+    @order.process_receipt!
+    redirect_to order_path(@order), notice: "Receipt processed successfully!"
   rescue => e
     redirect_to @order, alert: "Failed to process receipt: #{e.message}"
   end

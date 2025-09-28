@@ -23,38 +23,26 @@ class IngredientsController < ApplicationController
   def create
     @ingredient = Ingredient.new(ingredient_params)
 
-    respond_to do |format|
-      if @ingredient.save
-        format.html { redirect_to @ingredient, notice: "Ingredient was successfully created." }
-        format.json { render :show, status: :created, location: @ingredient }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @ingredient.errors, status: :unprocessable_entity }
-      end
+    if @ingredient.save
+      redirect_to @ingredient, notice: "Ingredient was successfully created."
+    else
+      render :new, status: :unprocessable_entity
     end
   end
 
   # PATCH/PUT /ingredients/1 or /ingredients/1.json
   def update
-    respond_to do |format|
-      if @ingredient.update(ingredient_params)
-        format.html { redirect_to @ingredient, notice: "Ingredient was successfully updated.", status: :see_other }
-        format.json { render :show, status: :ok, location: @ingredient }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @ingredient.errors, status: :unprocessable_entity }
-      end
+    if @ingredient.update(ingredient_params)
+      redirect_to @ingredient, notice: "Ingredient was successfully updated.", status: :see_other
+    else
+      render :edit, status: :unprocessable_entity
     end
   end
 
   # DELETE /ingredients/1 or /ingredients/1.json
   def destroy
     @ingredient.destroy!
-
-    respond_to do |format|
-      format.html { redirect_to ingredients_path, notice: "Ingredient was successfully destroyed.", status: :see_other }
-      format.json { head :no_content }
-    end
+    redirect_to ingredients_path, notice: "Ingredient was successfully destroyed.", status: :see_other
   end
 
   private

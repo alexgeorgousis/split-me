@@ -13,7 +13,7 @@
     <% if @orders.any? %>
       <% @orders.each do |order| %>
         <div class="relative">
-          <%= link_to bill_breakdown_order_path(order), class: "absolute inset-0 z-10" do %>
+          <%= link_to order_path(order), class: "absolute inset-0 z-10" do %>
           <% end %>
           <%= render order %>
           <div class="absolute top-4 right-4 z-20 flex space-x-2">

@@ -17,18 +17,18 @@ class OrdersTest < ApplicationSystemTestCase
   end
 
   test "should update Order" do
-    visit order_url(@order)
-    click_on "Edit this order", match: :first
+    visit orders_url
+    find("a[href='#{edit_order_path(@order)}']").click
 
     click_on "Update Order"
 
     assert_text "Order was successfully updated"
-    click_on "Back"
+    assert_current_path orders_path
   end
 
   test "should destroy Order" do
-    visit order_url(@order)
-    accept_confirm { click_on "Destroy this order", match: :first }
+    visit orders_url
+    accept_confirm { find("form[action*='#{@order.id}'][method='post'] button").click }
 
     assert_text "Order was successfully destroyed"
   end

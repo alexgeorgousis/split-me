@@ -46,7 +46,7 @@ class OrdersControllerTest < ActionDispatch::IntegrationTest
 
   test "should update order" do
     patch order_url(@order), params: { order: { meal_ids: [] } }
-    assert_redirected_to order_url(@order)
+    assert_redirected_to orders_url
   end
 
   test "should destroy order" do
@@ -62,7 +62,7 @@ class OrdersControllerTest < ActionDispatch::IntegrationTest
 
     post process_receipt_order_url(order)
 
-    assert_redirected_to bill_breakdown_order_url(order)
+    assert_redirected_to order_url(order)
     assert_equal "Receipt processed successfully!", flash[:notice]
 
     order.reload
