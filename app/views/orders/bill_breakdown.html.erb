@@ -1,10 +1,32 @@
 <% content_for :title, "Bill Breakdown - Order ##{@order.id}" %>
 
 <div class="md:w-4/5 w-full">
-  <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 gap-4">
+  <div class="flex items-center mb-6 gap-3">
+    <%= link_to "javascript:history.back()", class: "p-2 hover:bg-gray-100 rounded-md transition-colors" do %>
+      <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+      </svg>
+    <% end %>
     <h1 class="font-bold text-2xl sm:text-4xl">Bill Breakdown</h1>
-    <%= link_to "Back to Order", @order, class: "px-4 py-2 bg-gray-100 hover:bg-gray-50 rounded-md font-medium text-center" %>
   </div>
+
+  <!-- Receipt File Link -->
+  <% if @order.receipt && @order.receipt.attached? %>
+    <div class="mb-6 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+      <div class="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-2">
+        <div class="flex items-center space-x-2">
+          <svg class="w-5 h-5 text-blue-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+          </svg>
+          <span class="text-sm font-medium text-blue-900">Receipt File:</span>
+        </div>
+        <div class="flex flex-col sm:flex-row sm:items-center sm:space-x-2">
+          <%= link_to @order.receipt.filename, @order.receipt.file, target: "_blank", class: "text-blue-600 hover:text-blue-500 underline font-medium text-sm break-all" %>
+          <span class="text-blue-700 text-xs sm:text-sm">(<%= number_to_human_size(@order.receipt.blob.byte_size) %>)</span>
+        </div>
+      </div>
+    </div>
+  <% end %>
 
   <!-- Summary Card -->
   <%= render "bill_summary", order: @order %>

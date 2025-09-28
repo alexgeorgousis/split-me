@@ -20,7 +20,7 @@ class OrdersControllerTest < ActionDispatch::IntegrationTest
       post orders_url, params: { order: { meal_ids: [], receipt_attributes: { file: fixture_file_upload("test_receipt.pdf", "application/pdf") } } }
     end
 
-    assert_redirected_to order_url(Order.last)
+    assert_redirected_to orders_url
   end
 
   test "should create order with receipt" do

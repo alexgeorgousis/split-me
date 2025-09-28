@@ -10,7 +10,6 @@ class OrdersController < ApplicationController
 
   def new
     @order = Order.new
-    @order.build_receipt
   end
 
   def edit
@@ -21,7 +20,7 @@ class OrdersController < ApplicationController
 
     respond_to do |format|
       if @order.save
-        format.html { redirect_to @order, notice: "Order was successfully created." }
+        format.html { redirect_to orders_path, notice: "Order was successfully created." }
         format.json { render :show, status: :created, location: @order }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -94,6 +93,6 @@ class OrdersController < ApplicationController
     end
 
     def order_params
-      params.expect(order: [ meal_ids: [], receipt_attributes: [ :file ] ])
+      params.require(:order).permit(meal_ids: [], receipt_attributes: [ :file ])
     end
 end

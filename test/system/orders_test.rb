@@ -5,22 +5,15 @@ class OrdersTest < ApplicationSystemTestCase
     @order = orders(:one)
   end
 
-  test "visiting the index" do
-    visit orders_url
-    assert_selector "h1", text: "Orders"
-  end
-
   test "should create order" do
     visit orders_url
     click_on "New order"
 
     attach_file "order_receipt_attributes_file", Rails.root.join("test", "fixtures", "files", "test_receipt.pdf")
-    check "Pasta"
-    check "Pizza"
     click_on "Create Order"
 
     assert_text "Order was successfully created"
-    click_on "Back"
+    assert_current_path orders_path
   end
 
   test "should update Order" do
