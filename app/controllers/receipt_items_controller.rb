@@ -12,6 +12,11 @@ class ReceiptItemsController < ApplicationController
     redirect_to bill_breakdown_order_path(@order)
   end
 
+  def destroy
+    @receipt_item.destroy!
+    redirect_to bill_breakdown_order_path(@order), notice: "Receipt item removed successfully."
+  end
+
   private
 
   def set_order

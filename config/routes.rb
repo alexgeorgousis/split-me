@@ -6,7 +6,7 @@ Rails.application.routes.draw do
       post :process_receipt
       patch :batch_update_receipt_items
     end
-    resources :receipt_items, only: [] do
+    resources :receipt_items, only: [:destroy] do
       member do
         patch :toggle_selection
         patch :update_split_mode

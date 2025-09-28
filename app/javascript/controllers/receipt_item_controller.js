@@ -61,21 +61,25 @@ export default class extends Controller {
       const buttonMode = button.dataset.splitMode
 
       if (buttonMode === splitMode) {
-        button.classList.remove("border-gray-300", "bg-white", "text-gray-700", "hover:border-green-400", "hover:bg-green-50", "hover:border-yellow-400", "hover:bg-yellow-50")
+        button.classList.remove("border-gray-300", "bg-white", "text-gray-700", "hover:border-green-400", "hover:bg-green-50", "hover:border-yellow-400", "hover:bg-yellow-50", "hover:border-red-400", "hover:bg-red-50")
 
         if (splitMode === "mine") {
           button.classList.add("border-green-600", "bg-green-600", "text-white")
         } else if (splitMode === "shared") {
           button.classList.add("border-yellow-500", "bg-yellow-500", "text-white")
+        } else if (splitMode === "remove") {
+          button.classList.add("border-red-600", "bg-red-600", "text-white")
         }
       } else {
-        button.classList.remove("border-green-600", "bg-green-600", "border-yellow-500", "bg-yellow-500", "text-white")
+        button.classList.remove("border-green-600", "bg-green-600", "border-yellow-500", "bg-yellow-500", "border-red-600", "bg-red-600", "text-white")
         button.classList.add("border-gray-300", "bg-white", "text-gray-700")
 
         if (buttonMode === "mine") {
           button.classList.add("hover:border-green-400", "hover:bg-green-50")
         } else if (buttonMode === "shared") {
           button.classList.add("hover:border-yellow-400", "hover:bg-yellow-50")
+        } else if (buttonMode === "remove") {
+          button.classList.add("hover:border-red-400", "hover:bg-red-50")
         }
       }
     })
@@ -97,4 +101,5 @@ export default class extends Controller {
       shareElement.textContent = `Your share: £${myShare.toFixed(2)}`
     }
   }
+
 }

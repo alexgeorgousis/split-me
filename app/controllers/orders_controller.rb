@@ -72,10 +72,15 @@ class OrdersController < ApplicationController
 
     updates.each do |update|
       receipt_item = @order.receipt_items.find(update["id"])
-      receipt_item.update!(
-        selected: update["selected"],
-        split_mode: update["split_mode"]
-      )
+
+      if update["split_mode"] == "remove"
+        receipt_item.destroy!
+      else
+        receipt_item.update!(
+          selected: update["selected"],
+          split_mode: update["split_mode"]
+        )
+      end
     end
 
     head :ok
