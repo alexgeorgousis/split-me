@@ -1,19 +1,8 @@
-<%= turbo_frame_tag "receipt_item_#{receipt_item.id}", data: { controller: "receipt-item" } do %>
-  <%= button_to toggle_selection_order_receipt_item_path(order, receipt_item), method: :patch, class: "w-full text-left", data: { action: "click->receipt-item#toggle" } do %>
-    <div class="border rounded-md p-4 cursor-pointer transition-all hover:shadow-md <%= receipt_item.selected? ? (receipt_item.ingredient_matches.any? ? 'border-green-400 bg-green-100' : 'border-blue-400 bg-blue-100') : 'border-gray-300 bg-gray-50' %>" data-price="<%= receipt_item.price %>" data-selected="<%= receipt_item.selected? %>">
+<div class="border rounded-md overflow-hidden transition-all hover:shadow-md <%= receipt_item.selected? ? (receipt_item.ingredient_matches.any? ? 'border-green-400 bg-green-50' : 'border-blue-400 bg-blue-50') : 'border-gray-300 bg-gray-50' %>" data-controller="receipt-item" data-receipt-item-id="<%= receipt_item.id %>" data-selected="<%= receipt_item.selected? %>" data-split-mode="<%= receipt_item.split_mode %>">
+
+    <button class="w-full text-left p-4 cursor-pointer" data-action="click->receipt-item#toggleSelection">
       <div class="flex justify-between items-start">
         <div class="flex items-start space-x-3">
-          <div class="mt-1">
-            <% if receipt_item.selected? %>
-              <div class="w-5 h-5 bg-blue-600 border-2 border-blue-600 rounded flex items-center justify-center">
-                <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                </svg>
-              </div>
-            <% else %>
-              <div class="w-5 h-5 border-2 border-gray-400 rounded"></div>
-            <% end %>
-          </div>
           <div class="flex-1">
             <h3 class="font-medium text-lg"><%= receipt_item.name %></h3>
             <div class="text-sm text-gray-600 mt-1">
@@ -33,11 +22,27 @@
                 </div>
               <% end %>
             </div>
-          <% else %>
-            <span class="text-orange-600 text-sm">⚠ No matches found</span>
           <% end %>
         </div>
       </div>
+    </button>
+
+    <!-- Split Options Panel (always rendered, visibility controlled by JS) -->
+    <div class="border-t bg-white px-4 py-3" style="display: <%= receipt_item.selected? ? 'block' : 'none' %>">
+      <div class="flex items-center justify-between mb-2">
+        <span class="text-xs text-gray-500">Your share: £<%= receipt_item.my_share_amount %></span>
+      </div>
+
+      <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
+        <button class="flex-1 group relative overflow-hidden rounded-lg border-2 transition-all px-3 py-4 text-center cursor-pointer <%= receipt_item.mine? ? 'border-green-600 bg-green-600 text-white' : 'border-gray-300 bg-white text-gray-700 hover:border-green-400 hover:bg-green-50' %>" data-action="click->receipt-item#setSplitMode" data-split-mode="mine">
+          <div class="text-sm font-semibold">All Mine</div>
+        </button>
+
+        <button class="flex-1 group relative overflow-hidden rounded-lg border-2 transition-all px-3 py-4 text-center cursor-pointer <%= receipt_item.shared? ? 'border-yellow-500 bg-yellow-500 text-white' : 'border-gray-300 bg-white text-gray-700 hover:border-yellow-400 hover:bg-yellow-50' %>" data-action="click->receipt-item#setSplitMode" data-split-mode="shared">
+          <div class="text-sm font-semibold">Split</div>
+          <div class="absolute bottom-0 left-0 w-1/2 h-1 bg-green-400"></div>
+          <div class="absolute bottom-0 right-0 w-1/2 h-1 bg-orange-400"></div>
+        </button>
+      </div>
     </div>
-  <% end %>
-<% end %>
+</div>

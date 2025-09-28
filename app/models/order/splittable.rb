@@ -86,6 +86,12 @@ module Order::Splittable
   end
 
   def selected_receipt_total
-    receipt_items.where(selected: true).sum(:price)
+    receipt_items.where(selected: true).sum(&:my_share_amount)
+  end
+
+  def their_receipt_total
+    selected_their_share = receipt_items.where(selected: true).sum(&:their_share_amount)
+    unselected_total = receipt_items.where(selected: false).sum(:price)
+    selected_their_share + unselected_total
   end
 end

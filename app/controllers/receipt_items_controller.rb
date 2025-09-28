@@ -4,17 +4,12 @@ class ReceiptItemsController < ApplicationController
 
   def toggle_selection
     @receipt_item.update!(selected: !@receipt_item.selected)
+    redirect_to bill_breakdown_order_path(@order)
+  end
 
-    respond_to do |format|
-      format.html { redirect_to bill_breakdown_order_path(@order) }
-      format.turbo_stream {
-        render turbo_stream: turbo_stream.replace(
-          "receipt_item_#{@receipt_item.id}",
-          partial: "receipt_items/receipt_item",
-          locals: { receipt_item: @receipt_item, order: @order }
-        )
-      }
-    end
+  def update_split_mode
+    @receipt_item.update!(split_mode: params[:split_mode])
+    redirect_to bill_breakdown_order_path(@order)
   end
 
   private

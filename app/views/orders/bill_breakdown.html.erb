@@ -7,27 +7,16 @@
   </div>
 
   <!-- Summary Card -->
-  <div class="mb-8 p-6 bg-gradient-to-r from-blue-50 to-green-50 rounded-lg border" data-controller="bill-summary" data-bill-summary-total-value="<%= @order.receipt_total_from_items %>">
-    <h2 class="font-bold text-xl mb-4">Summary</h2>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-      <div class="text-center">
-        <div class="text-2xl font-bold text-gray-800" data-bill-summary-target="total">£<%= @order.receipt_total_from_items %></div>
-        <div class="text-sm text-gray-600">Total</div>
-      </div>
-      <div class="text-center">
-        <div class="text-2xl font-bold text-green-600" data-bill-summary-target="yours">£<%= @order.selected_receipt_total %></div>
-        <div class="text-sm text-gray-600">Yours</div>
-      </div>
-      <div class="text-center">
-        <div class="text-2xl font-bold text-orange-600" data-bill-summary-target="theirs">£<%= @order.receipt_total_from_items - @order.selected_receipt_total %></div>
-        <div class="text-sm text-gray-600">Theirs</div>
-      </div>
-    </div>
-  </div>
+  <%= render "bill_summary", order: @order %>
 
   <!-- Receipt Items -->
   <div class="space-y-6">
-    <h2 class="font-bold text-xl">Receipt Items</h2>
+    <div class="flex justify-between items-center">
+      <h2 class="font-bold text-xl">Receipt Items</h2>
+      <button id="update-summary-btn" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md font-medium cursor-pointer" data-controller="update-summary" data-action="click->update-summary#submitUpdates">
+        Update Summary
+      </button>
+    </div>
 
     <% @order.receipt_items.includes(:ingredient_matches, :ingredients).each do |receipt_item| %>
       <%= render "receipt_items/receipt_item", receipt_item: receipt_item, order: @order %>

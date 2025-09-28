@@ -4,10 +4,12 @@ Rails.application.routes.draw do
     member do
       get :bill_breakdown
       post :process_receipt
+      patch :batch_update_receipt_items
     end
     resources :receipt_items, only: [] do
       member do
         patch :toggle_selection
+        patch :update_split_mode
       end
     end
   end
