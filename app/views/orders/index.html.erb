@@ -1,12 +1,12 @@
 <% content_for :title, "Orders" %>
 
-<div class="w-full">
+<div class="w-full max-w-3xl mx-auto">
   <% if notice.present? %>
     <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-md inline-block" id="notice"><%= notice %></p>
   <% end %>
 
-  <div class="sm:inline-block">
-    <%= link_to "New order", new_order_path, class: "w-full sm:w-auto rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white block sm:inline-block font-medium text-center" %>
+  <div class="w-full">
+    <%= link_to "New order", new_order_path, class: "rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white block font-medium text-center" %>
   </div>
 
   <div id="orders" class="space-y-4 mt-6">
