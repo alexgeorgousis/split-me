@@ -5,10 +5,17 @@
     <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-md inline-block" id="notice"><%= notice %></p>
   <% end %>
 
+  <!-- Upload Receipt Button -->
   <div class="w-full">
-    <%= link_to "New order", new_order_path, class: "rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white block font-medium text-center" %>
+    <%= form_with model: Order.new, multipart: true, local: true, class: "w-full" do |form| %>
+      <%= form.fields_for :receipt, Receipt.new do |receipt_form| %>
+        <%= receipt_form.file_field :file, accept: "image/*,application/pdf", class: "hidden", id: "receipt-upload", onchange: "this.form.submit()" %>
+      <% end %>
+      <%= form.button "Upload Receipt", type: "button", onclick: "document.getElementById('receipt-upload').click()", class: "rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white block font-medium text-center w-full" %>
+    <% end %>
   </div>
 
+  <!-- Orders List -->
   <div id="orders" class="space-y-4 mt-6">
     <% if @orders.any? %>
       <% @orders.each do |order| %>
