@@ -11,7 +11,7 @@
       <%= form.fields_for :receipt, Receipt.new do |receipt_form| %>
         <%= receipt_form.file_field :file, accept: "image/*,application/pdf", class: "hidden", id: "receipt-upload", onchange: "this.form.submit()" %>
       <% end %>
-      <%= form.button "Upload Receipt", type: "button", onclick: "document.getElementById('receipt-upload').click()", class: "rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white block font-medium text-center w-full" %>
+      <%= form.button "Upload Receipt", type: "button", onclick: "document.getElementById('receipt-upload').click()", class: "rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white block font-medium text-center w-full cursor-pointer" %>
     <% end %>
   </div>
 
