@@ -33,9 +33,9 @@
         <span class="text-xs text-gray-500">Your share: £<%= receipt_item.my_share_amount %></span>
       </div>
 
-      <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
+      <div class="flex flex-row space-x-2">
         <button class="flex-1 group relative overflow-hidden rounded-lg border-2 transition-all px-3 py-4 text-center cursor-pointer <%= receipt_item.mine? ? 'border-green-600 bg-green-600 text-white' : 'border-gray-300 bg-white text-gray-700 hover:border-green-400 hover:bg-green-50' %>" data-action="click->receipt-item#setSplitMode" data-split-mode="mine">
-          <div class="text-sm font-semibold">All Mine</div>
+          <div class="text-sm font-semibold">Mine</div>
         </button>
 
         <button class="flex-1 group relative overflow-hidden rounded-lg border-2 transition-all px-3 py-4 text-center cursor-pointer <%= receipt_item.shared? ? 'border-yellow-500 bg-yellow-500 text-white' : 'border-gray-300 bg-white text-gray-700 hover:border-yellow-400 hover:bg-yellow-50' %>" data-action="click->receipt-item#setSplitMode" data-split-mode="shared">
