@@ -2,10 +2,10 @@
 <html class="h-full">
   <head>
     <script>
-      if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-        document.documentElement.classList.add('dark')
-      } else {
+      if (localStorage.theme === 'light' || (!('theme' in localStorage) && !window.matchMedia('(prefers-color-scheme: dark)').matches)) {
         document.documentElement.classList.remove('dark')
+      } else {
+        document.documentElement.classList.add('dark')
       }
     </script>
     <title><%= content_for(:title) || "Psonia" %></title>
