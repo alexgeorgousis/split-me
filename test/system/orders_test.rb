@@ -7,10 +7,8 @@ class OrdersTest < ApplicationSystemTestCase
 
   test "should create order" do
     visit orders_url
-    click_on "New order"
 
-    attach_file "order_receipt_attributes_file", Rails.root.join("test", "fixtures", "files", "test_receipt.pdf")
-    click_on "Create Order"
+    attach_file "receipt-upload", Rails.root.join("test", "fixtures", "files", "test_receipt.pdf"), make_visible: true
 
     assert_text "Order was successfully created"
     assert_current_path orders_path

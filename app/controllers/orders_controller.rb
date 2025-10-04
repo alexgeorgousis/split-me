@@ -39,6 +39,11 @@ class OrdersController < ApplicationController
   end
 
   def process_receipt
+    unless @order.receipt&.file&.attached?
+      redirect_to orders_path, alert: "No receipt file attached."
+      return
+    end
+
     @order.process_receipt!
     redirect_to order_path(@order), notice: "Receipt processed successfully!"
   rescue => e

@@ -1,11 +1,11 @@
-<div class="border rounded-md overflow-hidden transition-all hover:shadow-md <%= receipt_item.selected? ? (receipt_item.ingredient_matches.any? ? 'border-green-400 bg-green-50' : 'border-blue-400 bg-blue-50') : 'border-gray-300 bg-gray-50' %>" data-controller="receipt-item" data-receipt-item-id="<%= receipt_item.id %>" data-selected="<%= receipt_item.selected? %>" data-split-mode="<%= receipt_item.split_mode %>">
+<div class="border rounded-md overflow-hidden transition-all hover:shadow-md <%= receipt_item.selected? ? (receipt_item.ingredient_matches.any? ? 'border-green-400 bg-green-50 dark:border-green-600 dark:bg-green-900/20' : 'border-blue-400 bg-blue-50 dark:border-blue-600 dark:bg-blue-900/20') : 'border-gray-300 bg-gray-50 dark:border-gray-600 dark:bg-gray-800' %>" data-controller="receipt-item" data-receipt-item-id="<%= receipt_item.id %>" data-selected="<%= receipt_item.selected? %>" data-split-mode="<%= receipt_item.split_mode %>">
 
     <button class="w-full text-left p-4 cursor-pointer" data-action="click->receipt-item#toggleSelection">
       <div class="flex justify-between items-start">
         <div class="flex items-start space-x-3">
           <div class="flex-1">
             <h3 class="font-medium text-lg"><%= receipt_item.name %></h3>
-            <div class="text-sm text-gray-600 mt-1">
+            <div class="text-sm text-gray-600 dark:text-gray-400 mt-1">
               <span>Price: £<%= receipt_item.price %></span>
             </div>
           </div>
@@ -13,12 +13,12 @@
 
         <div class="ml-4">
           <% if receipt_item.ingredient_matches.any? %>
-            <div class="text-green-600 text-sm">
+            <div class="text-green-600 dark:text-green-400 text-sm">
               <span class="font-medium">✓ Matched to:</span>
               <% receipt_item.ingredient_matches.each do |match| %>
                 <div class="mt-1">
-                  <span class="text-blue-600"><%= match.ingredient.name %></span>
-                  <span class="text-gray-500">(confidence: <%= (match.confidence * 100).round(1) %>%)</span>
+                  <span class="text-blue-600 dark:text-blue-400"><%= match.ingredient.name %></span>
+                  <span class="text-gray-500 dark:text-gray-400">(confidence: <%= (match.confidence * 100).round(1) %>%)</span>
                 </div>
               <% end %>
             </div>
@@ -28,23 +28,23 @@
     </button>
 
     <!-- Split Options Panel (always rendered, visibility controlled by JS) -->
-    <div class="border-t bg-white px-4 py-3" style="display: <%= receipt_item.selected? ? 'block' : 'none' %>">
+    <div class="border-t dark:border-gray-700 bg-white dark:bg-gray-800 px-4 py-3" style="display: <%= receipt_item.selected? ? 'block' : 'none' %>">
       <div class="flex items-center justify-between mb-2">
-        <span class="text-xs text-gray-500">Your share: £<%= receipt_item.my_share_amount %></span>
+        <span class="text-xs text-gray-500 dark:text-gray-400">Your share: £<%= receipt_item.my_share_amount %></span>
       </div>
 
       <div class="flex flex-row space-x-2">
-        <button class="flex-1 group relative overflow-hidden rounded-lg border-2 transition-all px-3 py-4 text-center cursor-pointer <%= receipt_item.mine? ? 'border-green-600 bg-green-600 text-white' : 'border-gray-300 bg-white text-gray-700 hover:border-green-400 hover:bg-green-50' %>" data-action="click->receipt-item#setSplitMode" data-split-mode="mine">
+        <button class="flex-1 group relative overflow-hidden rounded-lg border-2 transition-all px-3 py-4 text-center cursor-pointer <%= receipt_item.mine? ? 'border-green-600 bg-green-600 text-white' : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:border-green-400 hover:bg-green-50 dark:hover:bg-green-900/20' %>" data-action="click->receipt-item#setSplitMode" data-split-mode="mine">
           <div class="text-sm font-semibold">Mine</div>
         </button>
 
-        <button class="flex-1 group relative overflow-hidden rounded-lg border-2 transition-all px-3 py-4 text-center cursor-pointer <%= receipt_item.shared? ? 'border-yellow-500 bg-yellow-500 text-white' : 'border-gray-300 bg-white text-gray-700 hover:border-yellow-400 hover:bg-yellow-50' %>" data-action="click->receipt-item#setSplitMode" data-split-mode="shared">
+        <button class="flex-1 group relative overflow-hidden rounded-lg border-2 transition-all px-3 py-4 text-center cursor-pointer <%= receipt_item.shared? ? 'border-yellow-500 bg-yellow-500 text-white' : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:border-yellow-400 hover:bg-yellow-50 dark:hover:bg-yellow-900/20' %>" data-action="click->receipt-item#setSplitMode" data-split-mode="shared">
           <div class="text-sm font-semibold">Split</div>
           <div class="absolute bottom-0 left-0 w-1/2 h-1 bg-green-400"></div>
           <div class="absolute bottom-0 right-0 w-1/2 h-1 bg-orange-400"></div>
         </button>
 
-        <button class="flex-1 group relative overflow-hidden rounded-lg border-2 transition-all px-3 py-4 text-center cursor-pointer border-gray-300 bg-white text-gray-700 hover:border-red-400 hover:bg-red-50" data-action="click->receipt-item#setSplitMode" data-split-mode="remove">
+        <button class="flex-1 group relative overflow-hidden rounded-lg border-2 transition-all px-3 py-4 text-center cursor-pointer border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:border-red-400 hover:bg-red-50 dark:hover:bg-red-900/20" data-action="click->receipt-item#setSplitMode" data-split-mode="remove">
           <div class="text-sm font-semibold">Remove</div>
         </button>
       </div>
