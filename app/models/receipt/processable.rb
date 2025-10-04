@@ -5,7 +5,7 @@ module Receipt::Processable
     Rails.logger.info "Checking if receipt is attached..."
     unless file.attached?
       Rails.logger.error "Receipt not attached"
-      raise "Please check the file format."
+      return false
     end
     Rails.logger.info "Receipt is attached"
 

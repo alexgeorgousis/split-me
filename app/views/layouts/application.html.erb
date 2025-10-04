@@ -1,13 +1,6 @@
 <!DOCTYPE html>
-<html class="h-full">
+<html>
   <head>
-    <script>
-      if (localStorage.theme === 'light' || (!('theme' in localStorage) && !window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-        document.documentElement.classList.remove('dark')
-      } else {
-        document.documentElement.classList.add('dark')
-      }
-    </script>
     <title><%= content_for(:title) || "Psonia" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -29,7 +22,7 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body class="h-full bg-white dark:bg-gray-900 dark:text-gray-100">
+  <body class="bg-white dark:bg-gray-900 dark:text-gray-100">
     <main class="container mx-auto mt-28 px-5 flex">
       <%= yield %>
     </main>

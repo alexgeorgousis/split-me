@@ -40,7 +40,7 @@ class OrdersController < ApplicationController
 
   def process_receipt
     unless @order.receipt&.file&.attached?
-      redirect_to @order, alert: "Failed to process receipt. Please check the file format."
+      redirect_to orders_path, alert: "No receipt file attached."
       return
     end
 
