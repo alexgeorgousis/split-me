@@ -1,19 +1,21 @@
 import { Controller } from "@hotwired/stimulus"
 
+// TODO: rename to summary controller
+
 export default class extends Controller {
+  static targets = ["receiptItem"]
+  static values = {
+    receiptItems: Array
+  }
+
   submitUpdates() {
-    const receiptItems = document.querySelectorAll('[data-controller="receipt-item"]')
     const updates = []
 
-    receiptItems.forEach(item => {
-      const itemId = item.dataset.receiptItemId
-      const selected = item.dataset.selected === "true"
-      const splitMode = item.dataset.splitMode
-
+    this.receiptItemsValue.forEach(item => {
       updates.push({
-        id: itemId,
-        selected: selected,
-        split_mode: splitMode
+        id: item.id,
+        selected: item.selected,
+        split_mode: item.splitMode
       })
     })
 
@@ -34,15 +36,15 @@ export default class extends Controller {
         'X-CSRF-Token': document.querySelector('[name="csrf-token"]').content
       }
     })
-    .then(response => {
-      if (response.ok) {
-        window.location.reload()
-      } else {
-        console.error('Failed to update receipt items')
-      }
-    })
-    .catch(error => {
-      console.error('Error updating receipt items:', error)
-    })
+      .then(response => {
+        if (response.ok) {
+          window.location.reload()
+        } else {
+          console.error('Failed to update receipt items')
+        }
+      })
+      .catch(error => {
+        console.error('Error updating receipt items:', error)
+      })
   }
 }

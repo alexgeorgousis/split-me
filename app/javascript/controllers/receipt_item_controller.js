@@ -16,10 +16,8 @@ export default class extends Controller {
     "commonSelectedButton",
     "selectedMineButton",
     "selectedSharedButton",
-    "selectedRemoveButton",
     "unselectedMineButton",
     "unselectedSharedButton",
-    "unselectedRemoveButton",
   ]
 
   connect() {
@@ -84,10 +82,6 @@ export default class extends Controller {
         button.classList.remove(...this.unselectedSharedButtonClasses)
         button.classList.add(...this.selectedSharedButtonClasses)
         break
-      case "remove":
-        button.classList.remove(...this.unselectedRemoveButtonClasses)
-        button.classList.add(...this.selectedRemoveButtonClasses)
-        break
     }
   }
 
@@ -103,10 +97,6 @@ export default class extends Controller {
       case "shared":
         button.classList.remove(...this.selectedSharedButtonClasses)
         button.classList.add(...this.unselectedSharedButtonClasses)
-        break
-      case "remove":
-        button.classList.remove(...this.selectedRemoveButtonClasses)
-        button.classList.add(...this.unselectedRemoveButtonClasses)
         break
     }
   }
@@ -127,9 +117,6 @@ export default class extends Controller {
         break
       case "shared":
         yourShare = price / 2
-        break
-      case "remove":
-        yourShare = 0.0
         break
     }
 

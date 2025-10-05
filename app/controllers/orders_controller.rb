@@ -54,7 +54,7 @@ class OrdersController < ApplicationController
     updates = JSON.parse(params[:updates])
 
     updates.each do |update|
-      receipt_item = @order.receipt_items.find(update["id"])
+      receipt_item = @order.receipt.receipt_items.find(update["id"])
 
       if update["split_mode"] == "remove"
         receipt_item.destroy!

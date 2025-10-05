@@ -41,7 +41,7 @@ module Order::Splittable
 
     success_count = 0
 
-    receipt_items.each do |receipt_item|
+    receipt.receipt_items.each do |receipt_item|
       next if receipt_item.ingredient_matches.any?
 
       match = Ingredient.auto_match_receipt_item!(receipt_item)
@@ -54,8 +54,8 @@ module Order::Splittable
   def matching_summary
     return {} unless receipt.processed?
 
-    total_items = receipt_items.count
-    matched_items = receipt_items.joins(:ingredient_matches).distinct.count
+    total_items = receipt.receipt_items.count
+    matched_items = receipt.receipt_items.joins(:ingredient_matches).distinct.count
     unmatched_items = total_items - matched_items
 
     {
@@ -86,12 +86,12 @@ module Order::Splittable
   end
 
   def selected_receipt_total
-    receipt_items.where(selected: true).sum(&:my_share_amount)
+    receipt.receipt_items.where(selected: true).sum(&:my_share_amount)
   end
 
   def their_receipt_total
-    selected_their_share = receipt_items.where(selected: true).sum(&:their_share_amount)
-    unselected_total = receipt_items.where(selected: false).sum(:price)
-    selected_their_share + unselected_total
+    # TODO: There should be a receipt.total method to do this
+    total = receipt.receipt_items.sum(:price)
+    total - selected_receipt_total
   end
 end
