@@ -1,5 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 
+// TODO: use logical CSS classes instead of cosnts
+
 const SELECTED_RECEIPT_ITEM_CLASSES = [
   "border-blue-400", "dark:border-blue-600", "bg-blue-50", "dark:bg-blue-900/20"
 ]
@@ -40,19 +42,19 @@ const SELECTED_REMOVE_BUTTON_CLASSES = [
 ]
 
 export default class extends Controller {
-  static targets = ["splitModePanel", "button"]
+  static targets = ["splitModePanel", "button", "yourShare"]
 
   static values = {
+    splitMode: String,
     selected: Boolean,
-    splitMode: String
+    price: Number
   }
 
   connect() {
-    // TODO: can i just call toggleSelected here?
     this.#updateReceiptItemStyles()
     this.#displaySplitModePanel()
-
-    this.setSplitMode({ params: { splitMode: this.splitModeValue } })
+    this.#updateSplitModeButtons()
+    this.#updateYourShare()
   }
 
   toggleSelected() {
@@ -62,8 +64,9 @@ export default class extends Controller {
   }
 
   setSplitMode(event) {
-    this.#updateSplitModeButtons(event.params.splitMode)
-    this.#updateShareAmount()
+    this.splitModeValue = event.params.splitMode
+    this.#updateSplitModeButtons()
+    this.#updateYourShare()
   }
 
   // Private
@@ -82,9 +85,9 @@ export default class extends Controller {
     }
   }
 
-  #updateSplitModeButtons(selectedSplitMode) {
+  #updateSplitModeButtons() {
     this.buttonTargets.forEach(button => {
-      if (this.#isSelected(button, selectedSplitMode)) {
+      if (this.#isSelected(button, this.splitModeValue)) {
         this.#styleSelected(button)
       } else {
         this.#styleUnselected(button)
@@ -133,21 +136,25 @@ export default class extends Controller {
     return button.innerText.toLowerCase().trim()
   }
 
-  #updateShareAmount() {
-    // const price = parseFloat(this.element.querySelector('[class*="Price:"]').textContent.replace('Price: £', ''))
-    // const splitMode = this.element.dataset.splitMode
-    // const shareElement = this.element.querySelector('[class*="Your share:"]')
-    //
-    // let myShare = 0
-    // if (splitMode === "mine") {
-    //   myShare = price
-    // } else if (splitMode === "shared") {
-    //   myShare = price / 2
-    // }
-    //
-    // if (shareElement) {
-    //   shareElement.textContent = `Your share: £${myShare.toFixed(2)}`
-    // }
+  #updateYourShare() {
+    const price = this.priceValue
+    const splitMode = this.splitModeValue
+    const yourShareElement = this.yourShareTarget
+
+    let yourShare = 0.0
+    switch (splitMode) {
+      case "mine":
+        yourShare = price
+        break
+      case "shared":
+        yourShare = price / 2
+        break
+      case "remove":
+        yourShare = 0.0
+        break
+    }
+
+    yourShareElement.textContent = `Your share: £${yourShare.toFixed(2)}`
   }
 
 }
