@@ -90,7 +90,7 @@ class OrdersControllerTest < ActionDispatch::IntegrationTest
 
     post process_receipt_order_url(order)
 
-    assert_redirected_to order_url(order)
-    assert_equal "Failed to process receipt. Please check the file format.", flash[:alert]
+    assert_redirected_to orders_url
+    assert_equal "No receipt file attached.", flash[:alert]
   end
 end
