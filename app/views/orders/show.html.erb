@@ -1,6 +1,8 @@
 <% content_for :title, "Bill Breakdown" %>
 
 <div class="md:w-4/5 w-full">
+
+  <!-- Title -->
   <div class="flex items-center mb-6 gap-3">
     <%= link_to "javascript:history.back()", class: "p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors" do %>
       <svg class="w-6 h-6 text-gray-600 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -33,6 +35,8 @@
 
   <!-- Receipt Items -->
   <div class="space-y-6">
+
+    <!-- Header with Update Button -->
     <div class="flex justify-between items-center">
       <h2 class="font-bold text-xl">Receipt Items</h2>
       <button id="update-summary-btn" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600 text-white rounded-md font-medium cursor-pointer" data-controller="update-summary" data-action="click->update-summary#submitUpdates">
@@ -40,13 +44,14 @@
       </button>
     </div>
 
+    <!-- List of Receipt Items -->
     <% @order.receipt_items.includes(:ingredient_matches, :ingredients).each do |receipt_item| %>
       <%= render "receipt_items/receipt_item", receipt_item: receipt_item, order: @order %>
     <% end %>
   </div>
 
+  <!-- Meal Breakdown -->
   <% if @order.meals.any? %>
-    <!-- Meal Breakdown -->
     <div class="space-y-6 mt-8">
       <h2 class="font-bold text-xl">Meal Costs</h2>
 

@@ -1,105 +1,146 @@
 import { Controller } from "@hotwired/stimulus"
 
+const COMMON_UNSELECTED_BUTTON_CLASSES = [
+  "border-gray-300", "dark:border-gray-600", // border
+  "bg-white", "dark:bg-gray-800", // background
+  "text-gray-700", "dark:text-gray-300", // text
+]
+
+const UNSELECTED_MINE_BUTTON_CLASSES = [
+  "hover:border-green-400", "hover:bg-green-50", "dark:hover:bg-green-900/20"
+
+]
+
+const SELECTED_MINE_BUTTON_CLASSES = [
+  "border-green-600", "bg-green-600", "text-white"
+]
+
+const UNSELECTED_SHARED_BUTTON_CLASSES = [
+  "hover:border-yellow-400", "hover:bg-yellow-50", "dark:hover:bg-yellow-900/20"
+]
+
+const SELECTED_SHARED_BUTTON_CLASSES = [
+  "border-yellow-600", "bg-yellow-600", "text-white"
+]
+
+const UNSELECTED_REMOVE_BUTTON_CLASSES = [
+  "hover:border-red-400", "hover:bg-red-50", "dark:hover:bg-red-900/20"
+]
+
+const SELECTED_REMOVE_BUTTON_CLASSES = [
+  "border-red-600", "bg-red-600", "text-white"
+]
+
 export default class extends Controller {
-  static targets = ["checkbox"]
+  static targets = ["splitModePanel", "button"]
 
-  toggleSelection() {
-    const currentSelected = this.element.dataset.selected === "true"
-    const newSelected = !currentSelected
+  static values = {
+    selected: Boolean,
+    splitMode: String
+  }
 
-    this.element.dataset.selected = newSelected
-    this.updateSelectionUI(newSelected)
-    this.updateSplitPanel()
+  connect() {
+    // TODO: can i just call toggleSelected here?
+    this.#updateReceiptItemStyles()
+    this.#displaySplitModePanel()
+
+    this.setSplitMode({ params: { splitMode: this.splitModeValue } })
+  }
+
+  toggleSelected() {
+    this.selectedValue = !this.selectedValue
+    this.#displaySplitModePanel()
+    this.#updateReceiptItemStyles()
   }
 
   setSplitMode(event) {
-    const splitMode = event.currentTarget.dataset.splitMode
-    this.element.dataset.splitMode = splitMode
-    this.updateSplitModeUI(splitMode)
-    this.updateShareAmount()
+    this.#updateSplitModeButtons(event.params.splitMode)
+    this.#updateShareAmount()
   }
 
-  updateSelectionUI(selected) {
-    if (selected) {
-      this.element.classList.remove("border-gray-300", "bg-gray-50")
-      this.element.classList.add("border-blue-400", "bg-blue-50")
+  // Private
 
-      const checkbox = this.element.querySelector(".w-5.h-5")
-      if (checkbox) {
-        checkbox.className = "w-5 h-5 bg-blue-600 border-2 border-blue-600 rounded flex items-center justify-center"
-        checkbox.innerHTML = `
-          <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-          </svg>
-        `
-      }
+  #displaySplitModePanel() {
+    this.splitModePanelTarget.style.display = this.selectedValue ? "block" : "none"
+  }
+
+  #updateReceiptItemStyles() {
+    if (this.selectedValue) {
+      // TODO: move these classes to consts
+      this.element.classList.remove("border-gray-300", "dark:border-gray-600", "bg-gray-50", "dark:bg-gray-800")
+      this.element.classList.add("border-blue-400", "dark:border-blue-600", "bg-blue-50", "dark:bg-blue-900/20")
     } else {
-      this.element.classList.remove("border-blue-400", "bg-blue-50")
-      this.element.classList.add("border-gray-300", "bg-gray-50")
-
-      const checkbox = this.element.querySelector(".w-5.h-5")
-      if (checkbox) {
-        checkbox.className = "w-5 h-5 border-2 border-gray-400 rounded"
-        checkbox.innerHTML = ""
-      }
+      this.element.classList.add("border-blue-400", "dark:border-blue-600", "bg-blue-50", "dark:bg-blue-900/20")
+      this.element.classList.add("border-gray-300", "dark:border-gray-600", "bg-gray-50", "dark:bg-gray-800")
     }
   }
 
-  updateSplitPanel() {
-    const selected = this.element.dataset.selected === "true"
-    const splitPanel = this.element.querySelector('.border-t')
-
-    if (splitPanel) {
-      splitPanel.style.display = selected ? "block" : "none"
-    }
-  }
-
-  updateSplitModeUI(splitMode) {
-    const buttons = this.element.querySelectorAll('[data-split-mode]')
-
-    buttons.forEach(button => {
-      const buttonMode = button.dataset.splitMode
-
-      if (buttonMode === splitMode) {
-        button.classList.remove("border-gray-300", "bg-white", "text-gray-700", "hover:border-green-400", "hover:bg-green-50", "hover:border-yellow-400", "hover:bg-yellow-50", "hover:border-red-400", "hover:bg-red-50")
-
-        if (splitMode === "mine") {
-          button.classList.add("border-green-600", "bg-green-600", "text-white")
-        } else if (splitMode === "shared") {
-          button.classList.add("border-yellow-500", "bg-yellow-500", "text-white")
-        } else if (splitMode === "remove") {
-          button.classList.add("border-red-600", "bg-red-600", "text-white")
-        }
+  #updateSplitModeButtons(selectedSplitMode) {
+    this.buttonTargets.forEach(button => {
+      if (this.#isSelected(button, selectedSplitMode)) {
+        this.#styleSelected(button)
       } else {
-        button.classList.remove("border-green-600", "bg-green-600", "border-yellow-500", "bg-yellow-500", "border-red-600", "bg-red-600", "text-white")
-        button.classList.add("border-gray-300", "bg-white", "text-gray-700")
-
-        if (buttonMode === "mine") {
-          button.classList.add("hover:border-green-400", "hover:bg-green-50")
-        } else if (buttonMode === "shared") {
-          button.classList.add("hover:border-yellow-400", "hover:bg-yellow-50")
-        } else if (buttonMode === "remove") {
-          button.classList.add("hover:border-red-400", "hover:bg-red-50")
-        }
+        this.#styleUnselected(button)
       }
     })
   }
 
-  updateShareAmount() {
-    const price = parseFloat(this.element.querySelector('[class*="Price:"]').textContent.replace('Price: £', ''))
-    const splitMode = this.element.dataset.splitMode
-    const shareElement = this.element.querySelector('[class*="Your share:"]')
+  #isSelected(button, selectedSplitMode) {
+    return this.#splitModeFor(button) === selectedSplitMode
+  }
 
-    let myShare = 0
+  #styleSelected(button) {
+    button.classList.remove(...COMMON_UNSELECTED_BUTTON_CLASSES)
+
+    switch (this.#splitModeFor(button)) {
+      case "mine":
+        button.classList.remove(...UNSELECTED_MINE_BUTTON_CLASSES)
+        button.classList.add(...SELECTED_MINE_BUTTON_CLASSES)
+        break
+      case "shared":
+        button.classList.remove(...UNSELECTED_SHARED_BUTTON_CLASSES)
+        button.classList.add(...SELECTED_SHARED_BUTTON_CLASSES)
+        break
+      case "remove":
+        button.classList.remove(...UNSELECTED_REMOVE_BUTTON_CLASSES)
+        button.classList.add(...SELECTED_REMOVE_BUTTON_CLASSES)
+        break
+    }
+  }
+
+  #styleUnselected(button) {
+    button.classList.remove("border-green-600", "bg-green-600", "border-yellow-500", "bg-yellow-500", "border-red-600", "bg-red-600", "text-white")
+    button.classList.add(...COMMON_UNSELECTED_BUTTON_CLASSES)
+
+    const splitMode = this.#splitModeFor(button)
     if (splitMode === "mine") {
-      myShare = price
+      button.classList.add(...UNSELECTED_MINE_BUTTON_CLASSES)
     } else if (splitMode === "shared") {
-      myShare = price / 2
+      button.classList.add(...UNSELECTED_SHARED_BUTTON_CLASSES)
+    } else if (splitMode === "remove") {
+      button.classList.add(...UNSELECTED_REMOVE_BUTTON_CLASSES)
     }
+  }
 
-    if (shareElement) {
-      shareElement.textContent = `Your share: £${myShare.toFixed(2)}`
-    }
+  #splitModeFor(button) {
+    return button.innerText.toLowerCase().trim()
+  }
+
+  #updateShareAmount() {
+    // const price = parseFloat(this.element.querySelector('[class*="Price:"]').textContent.replace('Price: £', ''))
+    // const splitMode = this.element.dataset.splitMode
+    // const shareElement = this.element.querySelector('[class*="Your share:"]')
+    //
+    // let myShare = 0
+    // if (splitMode === "mine") {
+    //   myShare = price
+    // } else if (splitMode === "shared") {
+    //   myShare = price / 2
+    // }
+    //
+    // if (shareElement) {
+    //   shareElement.textContent = `Your share: £${myShare.toFixed(2)}`
+    // }
   }
 
 }
