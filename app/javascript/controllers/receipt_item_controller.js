@@ -7,20 +7,20 @@ const COMMON_UNSELECTED_BUTTON_CLASSES = [
 ]
 
 const UNSELECTED_MINE_BUTTON_CLASSES = [
-  "hover:border-green-400", "hover:bg-green-50", "dark:hover:bg-green-900/20"
+  "hover:border-green-600", "hover:bg-green-50", "dark:hover:bg-green-900/20"
 
 ]
 
 const SELECTED_MINE_BUTTON_CLASSES = [
-  "border-green-600", "bg-green-600", "text-white"
+  "border-green-400", "bg-green-50", "dark:bg-green-900/20", "text-white"
 ]
 
 const UNSELECTED_SHARED_BUTTON_CLASSES = [
-  "hover:border-yellow-400", "hover:bg-yellow-50", "dark:hover:bg-yellow-900/20"
+  "hover:border-yellow-600", "hover:border-b-0", "border-b-0", "hover:bg-yellow-50", "dark:hover:bg-yellow-900/20"
 ]
 
 const SELECTED_SHARED_BUTTON_CLASSES = [
-  "border-yellow-600", "bg-yellow-600", "text-white"
+  "border-yellow-400", "border-b-0", "bg-yellow-50", "dark:bg-yellow-900/20", "text-white"
 ]
 
 const UNSELECTED_REMOVE_BUTTON_CLASSES = [
@@ -28,7 +28,7 @@ const UNSELECTED_REMOVE_BUTTON_CLASSES = [
 ]
 
 const SELECTED_REMOVE_BUTTON_CLASSES = [
-  "border-red-600", "bg-red-600", "text-white"
+  "border-red-600", "bg-red-50", "dark:bg-red-900/20", "text-white"
 ]
 
 export default class extends Controller {
@@ -109,7 +109,9 @@ export default class extends Controller {
   }
 
   #styleUnselected(button) {
-    button.classList.remove("border-green-600", "bg-green-600", "border-yellow-500", "bg-yellow-500", "border-red-600", "bg-red-600", "text-white")
+    button.classList.remove(...SELECTED_MINE_BUTTON_CLASSES)
+    button.classList.remove(...SELECTED_SHARED_BUTTON_CLASSES)
+    button.classList.remove(...SELECTED_REMOVE_BUTTON_CLASSES)
     button.classList.add(...COMMON_UNSELECTED_BUTTON_CLASSES)
 
     const splitMode = this.#splitModeFor(button)
