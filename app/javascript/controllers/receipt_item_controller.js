@@ -1,46 +1,5 @@
 import { Controller } from "@hotwired/stimulus"
 
-// TODO: use logical CSS classes instead of cosnts
-
-const SELECTED_RECEIPT_ITEM_CLASSES = [
-  "border-blue-400", "dark:border-blue-600", "bg-blue-50", "dark:bg-blue-900/20"
-]
-
-const UNSELECTED_RECEIPT_ITEM_CLASSES = [
-  "border-gray-300", "dark:border-gray-600", "bg-gray-50", "dark:bg-gray-800"
-]
-
-const COMMON_UNSELECTED_BUTTON_CLASSES = [
-  "border-gray-300", "dark:border-gray-600", // border
-  "bg-white", "dark:bg-gray-800", // background
-  "text-gray-700", "dark:text-gray-300", // text
-]
-
-const UNSELECTED_MINE_BUTTON_CLASSES = [
-  "hover:border-green-600", "hover:bg-green-50", "dark:hover:bg-green-900/20"
-
-]
-
-const SELECTED_MINE_BUTTON_CLASSES = [
-  "border-green-400", "bg-green-50", "dark:bg-green-900/20", "text-white"
-]
-
-const UNSELECTED_SHARED_BUTTON_CLASSES = [
-  "hover:border-yellow-600", "hover:border-b-0", "border-b-0", "hover:bg-yellow-50", "dark:hover:bg-yellow-900/20"
-]
-
-const SELECTED_SHARED_BUTTON_CLASSES = [
-  "border-yellow-400", "border-b-0", "bg-yellow-50", "dark:bg-yellow-900/20", "text-white"
-]
-
-const UNSELECTED_REMOVE_BUTTON_CLASSES = [
-  "hover:border-red-400", "hover:bg-red-50", "dark:hover:bg-red-900/20"
-]
-
-const SELECTED_REMOVE_BUTTON_CLASSES = [
-  "border-red-600", "bg-red-50", "dark:bg-red-900/20", "text-white"
-]
-
 export default class extends Controller {
   static targets = ["splitModePanel", "button", "yourShare"]
 
@@ -50,10 +9,23 @@ export default class extends Controller {
     price: Number
   }
 
+  static classes = [
+    "selectedReceiptItem",
+    "unselectedReceiptItem",
+    "commonUnselectedButton",
+    "commonSelectedButton",
+    "selectedMineButton",
+    "selectedSharedButton",
+    "selectedRemoveButton",
+    "unselectedMineButton",
+    "unselectedSharedButton",
+    "unselectedRemoveButton",
+  ]
+
   connect() {
     this.#updateReceiptItemStyles()
     this.#displaySplitModePanel()
-    this.#updateSplitModeButtons()
+    this.#updateSplitModeButtonStyles()
     this.#updateYourShare()
   }
 
@@ -65,7 +37,7 @@ export default class extends Controller {
 
   setSplitMode(event) {
     this.splitModeValue = event.params.splitMode
-    this.#updateSplitModeButtons()
+    this.#updateSplitModeButtonStyles()
     this.#updateYourShare()
   }
 
@@ -77,15 +49,15 @@ export default class extends Controller {
 
   #updateReceiptItemStyles() {
     if (this.selectedValue) {
-      this.element.classList.remove(...UNSELECTED_RECEIPT_ITEM_CLASSES)
-      this.element.classList.add(...SELECTED_RECEIPT_ITEM_CLASSES)
+      this.element.classList.remove(...this.unselectedReceiptItemClasses)
+      this.element.classList.add(...this.selectedReceiptItemClasses)
     } else {
-      this.element.classList.remove(...SELECTED_RECEIPT_ITEM_CLASSES)
-      this.element.classList.add(...UNSELECTED_RECEIPT_ITEM_CLASSES)
+      this.element.classList.remove(...this.selectedReceiptItemClasses)
+      this.element.classList.add(...this.unselectedReceiptItemClasses)
     }
   }
 
-  #updateSplitModeButtons() {
+  #updateSplitModeButtonStyles() {
     this.buttonTargets.forEach(button => {
       if (this.#isSelected(button, this.splitModeValue)) {
         this.#styleSelected(button)
@@ -100,35 +72,42 @@ export default class extends Controller {
   }
 
   #styleSelected(button) {
-    button.classList.remove(...COMMON_UNSELECTED_BUTTON_CLASSES)
+    button.classList.remove(...this.commonUnselectedButtonClasses)
+    button.classList.add(...this.commonSelectedButtonClasses)
 
     switch (this.#splitModeFor(button)) {
       case "mine":
-        button.classList.remove(...UNSELECTED_MINE_BUTTON_CLASSES)
-        button.classList.add(...SELECTED_MINE_BUTTON_CLASSES)
+        button.classList.remove(...this.unselectedMineButtonClasses)
+        button.classList.add(...this.selectedMineButtonClasses)
         break
       case "shared":
-        button.classList.remove(...UNSELECTED_SHARED_BUTTON_CLASSES)
-        button.classList.add(...SELECTED_SHARED_BUTTON_CLASSES)
+        button.classList.remove(...this.unselectedSharedButtonClasses)
+        button.classList.add(...this.selectedSharedButtonClasses)
         break
       case "remove":
-        button.classList.remove(...UNSELECTED_REMOVE_BUTTON_CLASSES)
-        button.classList.add(...SELECTED_REMOVE_BUTTON_CLASSES)
+        button.classList.remove(...this.unselectedRemoveButtonClasses)
+        button.classList.add(...this.selectedRemoveButtonClasses)
         break
     }
   }
 
   #styleUnselected(button) {
-    button.classList.remove(...SELECTED_MINE_BUTTON_CLASSES, ...SELECTED_SHARED_BUTTON_CLASSES, ...SELECTED_REMOVE_BUTTON_CLASSES)
-    button.classList.add(...COMMON_UNSELECTED_BUTTON_CLASSES)
+    button.classList.remove(...this.commonSelectedButtonClasses)
+    button.classList.add(...this.commonUnselectedButtonClasses)
 
-    const splitMode = this.#splitModeFor(button)
-    if (splitMode === "mine") {
-      button.classList.add(...UNSELECTED_MINE_BUTTON_CLASSES)
-    } else if (splitMode === "shared") {
-      button.classList.add(...UNSELECTED_SHARED_BUTTON_CLASSES)
-    } else if (splitMode === "remove") {
-      button.classList.add(...UNSELECTED_REMOVE_BUTTON_CLASSES)
+    switch (this.#splitModeFor(button)) {
+      case "mine":
+        button.classList.remove(...this.selectedMineButtonClasses)
+        button.classList.add(...this.unselectedMineButtonClasses)
+        break
+      case "shared":
+        button.classList.remove(...this.selectedSharedButtonClasses)
+        button.classList.add(...this.unselectedSharedButtonClasses)
+        break
+      case "remove":
+        button.classList.remove(...this.selectedRemoveButtonClasses)
+        button.classList.add(...this.unselectedRemoveButtonClasses)
+        break
     }
   }
 
