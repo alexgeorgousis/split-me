@@ -1,5 +1,13 @@
 import { Controller } from "@hotwired/stimulus"
 
+const SELECTED_RECEIPT_ITEM_CLASSES = [
+  "border-blue-400", "dark:border-blue-600", "bg-blue-50", "dark:bg-blue-900/20"
+]
+
+const UNSELECTED_RECEIPT_ITEM_CLASSES = [
+  "border-gray-300", "dark:border-gray-600", "bg-gray-50", "dark:bg-gray-800"
+]
+
 const COMMON_UNSELECTED_BUTTON_CLASSES = [
   "border-gray-300", "dark:border-gray-600", // border
   "bg-white", "dark:bg-gray-800", // background
@@ -66,12 +74,11 @@ export default class extends Controller {
 
   #updateReceiptItemStyles() {
     if (this.selectedValue) {
-      // TODO: move these classes to consts
-      this.element.classList.remove("border-gray-300", "dark:border-gray-600", "bg-gray-50", "dark:bg-gray-800")
-      this.element.classList.add("border-blue-400", "dark:border-blue-600", "bg-blue-50", "dark:bg-blue-900/20")
+      this.element.classList.remove(...UNSELECTED_RECEIPT_ITEM_CLASSES)
+      this.element.classList.add(...SELECTED_RECEIPT_ITEM_CLASSES)
     } else {
-      this.element.classList.add("border-blue-400", "dark:border-blue-600", "bg-blue-50", "dark:bg-blue-900/20")
-      this.element.classList.add("border-gray-300", "dark:border-gray-600", "bg-gray-50", "dark:bg-gray-800")
+      this.element.classList.remove(...SELECTED_RECEIPT_ITEM_CLASSES)
+      this.element.classList.add(...UNSELECTED_RECEIPT_ITEM_CLASSES)
     }
   }
 
@@ -109,9 +116,7 @@ export default class extends Controller {
   }
 
   #styleUnselected(button) {
-    button.classList.remove(...SELECTED_MINE_BUTTON_CLASSES)
-    button.classList.remove(...SELECTED_SHARED_BUTTON_CLASSES)
-    button.classList.remove(...SELECTED_REMOVE_BUTTON_CLASSES)
+    button.classList.remove(...SELECTED_MINE_BUTTON_CLASSES, ...SELECTED_SHARED_BUTTON_CLASSES, ...SELECTED_REMOVE_BUTTON_CLASSES)
     button.classList.add(...COMMON_UNSELECTED_BUTTON_CLASSES)
 
     const splitMode = this.#splitModeFor(button)
