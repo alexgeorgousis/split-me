@@ -4,7 +4,15 @@ class ReceiptItemsController < ApplicationController
 
   def update
     if @receipt_item.update(receipt_item_params)
-      redirect_to order_path(@order)
+      respond_to do |format|
+        format.turbo_stream do
+          render turbo_stream: [
+            turbo_stream.replace("summary", partial: "orders/summary", locals: { order: @order }),
+            turbo_stream.replace("receipt_item_#{@receipt_item.id}", partial: "receipt_items/receipt_item", locals: { receipt_item: @receipt_item })
+          ]
+        end
+        format.html { redirect_to order_path(@order) }
+      end
     else
       redirect_to order_path(@order), alert: "Failed to update receipt item."
     end

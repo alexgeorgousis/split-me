@@ -67,8 +67,8 @@ class OrdersControllerTest < ActionDispatch::IntegrationTest
 
     order.reload
     assert order.receipt_processed?
-    assert order.receipt_items.any?
-    assert order.receipt_items.count > 0
+    assert order.receipt.receipt_items.any?
+    assert order.receipt.receipt_items.count > 0
   end
 
   test "should handle API response with explanatory text" do

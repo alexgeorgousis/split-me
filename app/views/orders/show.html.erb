@@ -30,21 +30,11 @@
     </div>
   <% end %>
 
-  <!-- Summary Card -->
   <%= render "summary", order: @order %>
 
   <!-- Receipt Items -->
   <div class="space-y-6" data-controller="update-summary" data-update-summary-receipt-items-value="<%= @order.receipt.receipt_items.to_json %>">
-
-    <!-- Header with Update Button -->
-    <div class="flex justify-between items-center">
-      <h2 class="font-bold text-xl">Receipt Items</h2>
-      <button id="update-summary-btn" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600 text-white rounded-md font-medium cursor-pointer" data-action="click->update-summary#submitUpdates">
-        Update Summary
-      </button>
-    </div>
-
-    <!-- List of Receipt Items -->
+    <h2 class="font-bold text-xl">Receipt Items</h2>
     <% @order.receipt.receipt_items.each do |receipt_item| %>
       <%= render receipt_item %>
     <% end %>

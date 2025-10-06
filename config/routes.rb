@@ -3,7 +3,6 @@ Rails.application.routes.draw do
   resources :orders do
     member do
       post :process_receipt
-      patch :batch_update_receipt_items
     end
     resources :receipt_items
   end
