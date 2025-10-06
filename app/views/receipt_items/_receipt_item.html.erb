@@ -8,13 +8,14 @@
     method: :patch,
     params: { selected: !receipt_item.selected, split_mode: receipt_item.selected? ? 'theirs' : 'mine' },
     form_class: "w-full",
-    class: "w-full text-left p-4 cursor-pointer" do %>
+    class: "w-full text-left p-4 cursor-pointer",
+    onclick: "if (window.getSelection().toString()) { event.preventDefault(); return false; }" do %>
     <div class="flex justify-between items-start pr-24">
       <div class="flex items-start space-x-3">
         <div class="flex-1">
-          <h3 class="font-medium text-lg"><%= receipt_item.name %></h3>
+          <h3 class="font-medium text-lg select-text"><%= receipt_item.name %></h3>
           <div class="text-sm text-gray-600 dark:text-gray-400 mt-1">
-            <span>Price: £<%= sprintf("%.2f", receipt_item.price) %></span>
+            <span class="select-text">Price: £<%= sprintf("%.2f", receipt_item.price) %></span>
           </div>
         </div>
       </div>
