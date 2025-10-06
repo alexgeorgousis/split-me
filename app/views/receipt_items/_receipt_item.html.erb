@@ -1,22 +1,15 @@
+<% selected_receipt_item_class = "border-blue-400 dark:border-blue-600 bg-blue-50 dark:bg-blue-900/20" %>
+<% unselected_receipt_item_class = "border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800" %>
 <div
-  data-controller="receipt-item"
-  data-receipt-item-selected-value="<%= receipt_item.selected? %>"
-  data-receipt-item-split-mode-value="<%= receipt_item.split_mode %>"
-  data-receipt-item-price-value="<%= receipt_item.price %>"
-  data-receipt-item-selected-receipt-item-class="border-blue-400 dark:border-blue-600 bg-blue-50 dark:bg-blue-900/20"
-  data-receipt-item-unselected-receipt-item-class="border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800"
-  data-receipt-item-common-selected-button-class="text-white"
-  data-receipt-item-selected-mine-button-class="border-green-400 bg-green-50 dark:bg-green-900/20"
-  data-receipt-item-selected-shared-button-class="border-yellow-400 border-b-0 bg-yellow-50 dark:bg-yellow-900/20"
-  data-receipt-item-selected-remove-button-class="border-red-600 bg-red-50 dark:bg-red-900/20"
-  data-receipt-item-common-unselected-button-class="border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300"
-  data-receipt-item-unselected-mine-button-class="hover:border-green-600 hover:bg-green-50 dark:hover:bg-green-900/20"
-  data-receipt-item-unselected-shared-button-class="hover:border-yellow-600 hover:border-b-0 border-b-0 hover:bg-yellow-50 dark:hover:bg-yellow-900/20"
-  data-receipt-item-unselected-remove-button-class="hover:border-red-400 hover:bg-red-50 dark:hover:bg-red-900/20"
-  class="border rounded-md overflow-hidden transition-all hover:shadow-md">
+  id="receipt_item_<%= receipt_item.id %>"
+  class="border rounded-md overflow-hidden transition-all hover:shadow-md <%= receipt_item.selected ? selected_receipt_item_class : unselected_receipt_item_class %> ">
 
   <!-- Main Receipt Item -->
-  <button class="w-full text-left p-4 cursor-pointer" data-action="click->receipt-item#toggleSelected">
+  <%= button_to order_receipt_item_path(receipt_item.receipt.order, receipt_item),
+    method: :patch,
+    params: { selected: !receipt_item.selected, split_mode: receipt_item.selected? ? 'theirs' : 'mine' },
+    form_class: "w-full",
+    class: "w-full text-left p-4 cursor-pointer " do %>
     <div class="flex justify-between items-start">
       <div class="flex items-start space-x-3">
         <div class="flex-1">
@@ -41,45 +34,51 @@
         <% end %>
       </div>
     </div>
-  </button>
+  <% end %>
 
   <!-- Split Mode Panel -->
   <div
-    data-receipt-item-target="splitModePanel"
-    class="border-t border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-4 py-3">
+    class="border-t border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-4 py-3 <%= receipt_item.selected? ? 'block' : 'hidden' %>">
     <div class="flex items-center justify-between mb-2">
       <span
-        data-receipt-item-target="yourShare"
         class="text-xs text-gray-500 dark:text-gray-400">Your share: £<%= receipt_item.my_share_amount %>
     </span>
     </div>
 
     <div class="flex flex-row space-x-2">
-      <button
-        data-receipt-item-target="button"
-        data-action="click->receipt-item#setSplitMode"
-        data-receipt-item-split-mode-param="mine"
-        class="flex-1 group relative overflow-hidden rounded-lg border-2 transition-all px-3 py-4 text-center cursor-pointer">
-        <div class="text-sm font-semibold">Mine</div>
-      </button>
 
-      <button
-        data-receipt-item-target="button"
-        data-action="click->receipt-item#setSplitMode"
-        data-receipt-item-split-mode-param="shared"
-        class="flex-1 group relative overflow-hidden rounded-lg border-2 transition-all px-3 py-4 text-center cursor-pointer">
+      <% common_base_button_class = "w-full group relative overflow-hidden rounded-lg border-2 transition-all px-3 py-4 text-center cursor-pointer" %>
+      <% common_selected_button_class = "text-white" %>
+      <% common_unselected_button_class = "border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300" %>
+
+      <% selected_mine_button_class = "border-green-400 bg-green-50 dark:bg-green-900/20" %>
+      <% unselected_mine_button_class = "hover:border-green-600 hover:bg-green-50 dark:hover:bg-green-900/20" %>
+      <%= button_to order_receipt_item_path(receipt_item.receipt.order, receipt_item),
+        method: :patch,
+        params: { split_mode: "mine" },
+        form_class: "flex-1",
+        class: "#{ common_base_button_class } #{ receipt_item.split_mode == 'mine' ? common_selected_button_class + ' ' + selected_mine_button_class : common_unselected_button_class + ' ' + unselected_mine_button_class }" do %>
+        <div class="text-sm font-semibold">Mine</div>
+      <% end %>
+
+      <% selected_shared_button_class = "border-yellow-400 border-b-0 bg-yellow-50 dark:bg-yellow-900/20" %>
+      <% unselected_shared_button_class = "hover:border-yellow-600 hover:border-b-0 border-b-0 hover:bg-yellow-50 dark:hover:bg-yellow-900/20" %>
+      <%= button_to order_receipt_item_path(receipt_item.receipt.order, receipt_item),
+        method: :patch,
+        params: { split_mode: "shared" },
+        form_class: "flex-1",
+        class: "#{ common_base_button_class } #{ receipt_item.split_mode == 'shared' ? common_selected_button_class + ' ' + selected_shared_button_class : common_unselected_button_class + ' ' + unselected_shared_button_class }" do %>
         <div class="text-sm font-semibold">Shared</div>
         <div class="absolute bottom-0 left-0 w-1/2 h-1 bg-green-400"></div>
         <div class="absolute bottom-0 right-0 w-1/2 h-1 bg-yellow-400"></div>
-      </button>
+      <% end %>
 
-      <button
-        data-receipt-item-target="button"
-        data-action="click->receipt-item#setSplitMode"
-        data-receipt-item-split-mode-param="remove"
-        class="flex-1 group relative overflow-hidden rounded-lg border-2 transition-all px-3 py-4 text-center cursor-pointer">
+      <%= button_to order_receipt_item_path(receipt_item.receipt.order, receipt_item),
+        method: :delete,
+        form_class: "flex-1",
+        class: common_base_button_class do %>
         <div class="text-sm font-semibold">Remove</div>
-      </button>
+      <% end %>
     </div>
   </div>
 </div>

@@ -1,5 +1,5 @@
 class OrdersController < ApplicationController
-  before_action :set_order, only: %i[ show edit update destroy process_receipt batch_update_receipt_items ]
+  before_action :set_order, only: %i[ show edit update destroy process_receipt ]
 
   def index
     @orders = Order.all
@@ -48,27 +48,6 @@ class OrdersController < ApplicationController
     redirect_to order_path(@order), notice: "Receipt processed successfully!"
   rescue => e
     redirect_to @order, alert: "Failed to process receipt: #{e.message}"
-  end
-
-  def batch_update_receipt_items
-    updates = JSON.parse(params[:updates])
-
-    updates.each do |update|
-      receipt_item = @order.receipt_items.find(update["id"])
-
-      if update["split_mode"] == "remove"
-        receipt_item.destroy!
-      else
-        receipt_item.update!(
-          selected: update["selected"],
-          split_mode: update["split_mode"]
-        )
-      end
-    end
-
-    head :ok
-  rescue => e
-    render json: { error: e.message }, status: :unprocessable_entity
   end
 
   private

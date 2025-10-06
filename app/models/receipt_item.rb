@@ -13,6 +13,8 @@ class ReceiptItem < ApplicationRecord
       (price / 2.0).round(2)
     when "theirs"
       0.0
+    else
+      0.0
     end
   end
 
@@ -24,6 +26,8 @@ class ReceiptItem < ApplicationRecord
       (price / 2.0).round(2)
     when "theirs"
       price
+    else
+      0.0
     end
   end
 end

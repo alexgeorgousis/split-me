@@ -3,14 +3,8 @@ Rails.application.routes.draw do
   resources :orders do
     member do
       post :process_receipt
-      patch :batch_update_receipt_items
     end
-    resources :receipt_items, only: [ :destroy ] do
-      member do
-        patch :toggle_selection
-        patch :update_split_mode
-      end
-    end
+    resources :receipt_items
   end
   resources :meals
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

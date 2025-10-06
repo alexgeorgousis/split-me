@@ -7,8 +7,4 @@ class Order < ApplicationRecord
 
   delegate :processed?, to: :receipt, prefix: true, allow_nil: true
   delegate :receipt_total_from_items, :receipt_items_count, :process_receipt!, to: :receipt, allow_nil: true
-
-  def receipt_items
-    receipt&.receipt_items || ReceiptItem.none
-  end
 end
