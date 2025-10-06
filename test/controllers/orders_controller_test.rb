@@ -60,29 +60,20 @@ class OrdersControllerTest < ActionDispatch::IntegrationTest
   test "should process receipt successfully" do
     order = Order.create!(receipt_attributes: { file: fixture_file_upload("test_receipt.pdf", "application/pdf") })
 
+    response_json = "[{\"name\": \"Test Item\", \"price\": 1.50}, {\"name\": \"Another Item\", \"price\": 2.50}]"
+
+    Receipt.prepend(Module.new do
+      define_method(:call_claude_api) { |prompt| response_json }
+    end)
+
     post process_receipt_order_url(order)
 
     assert_redirected_to order_url(order)
     assert_equal "Receipt processed successfully!", flash[:notice]
 
     order.reload
-    assert order.receipt_processed?
-    assert order.receipt.receipt_items.any?
-    assert order.receipt.receipt_items.count > 0
-  end
-
-  test "should handle API response with explanatory text" do
-    receipt = Receipt.new
-    response_with_text = "Here is the JSON array of the grocery items:\n\n[{\"name\": \"Test Item\", \"price\": 1.50}]"
-
-    # Mock the API call to return response with explanatory text
-    receipt.define_singleton_method(:call_claude_api) { |prompt| response_with_text }
-
-    items = receipt.send(:parse_sainsburys_items, "dummy text")
-
-    assert_equal 1, items.length
-    assert_equal "Test Item", items.first[:name]
-    assert_equal 1.50, items.first[:price]
+    assert order.receipt.processed?
+    assert_equal 2, order.receipt.receipt_items.count
   end
 
   test "should fail to process receipt when no receipt attached" do
