@@ -20,6 +20,17 @@ class ReceiptItemsController < ApplicationController
 
   def destroy
     @receipt_item.destroy!
+    respond_to do |format|
+      format.turbo_stream do
+        render turbo_stream: [
+          turbo_stream.remove("receipt_item_#{@receipt_item.id}"),
+          turbo_stream.replace("summary", partial: "orders/summary", locals: { order: @order })
+        ]
+      end
+      format.html { redirect_to order_path(@order) }
+    end
+  rescue => e
+    flash[:alert] = "Failed to delete receipt item: #{e.message}"
     redirect_to order_path(@order)
   end
 
