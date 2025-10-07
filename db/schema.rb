@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_06_171122) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_07_195007) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -45,44 +45,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_06_171122) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "ingredient_matches", force: :cascade do |t|
-    t.integer "receipt_item_id", null: false
-    t.integer "ingredient_id", null: false
-    t.decimal "confidence"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["ingredient_id"], name: "index_ingredient_matches_on_ingredient_id"
-    t.index ["receipt_item_id"], name: "index_ingredient_matches_on_receipt_item_id"
-  end
-
-  create_table "ingredients", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "meal_ingredients", force: :cascade do |t|
-    t.integer "meal_id", null: false
-    t.integer "ingredient_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["ingredient_id"], name: "index_meal_ingredients_on_ingredient_id"
-    t.index ["meal_id"], name: "index_meal_ingredients_on_meal_id"
-  end
-
-  create_table "meals", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "meals_orders", id: false, force: :cascade do |t|
-    t.integer "order_id", null: false
-    t.integer "meal_id", null: false
-    t.index ["meal_id"], name: "index_meals_orders_on_meal_id"
-    t.index ["order_id"], name: "index_meals_orders_on_order_id"
-  end
-
   create_table "orders", force: :cascade do |t|
     t.decimal "total"
     t.datetime "created_at", null: false
@@ -109,10 +71,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_06_171122) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "ingredient_matches", "ingredients"
-  add_foreign_key "ingredient_matches", "receipt_items"
-  add_foreign_key "meal_ingredients", "ingredients"
-  add_foreign_key "meal_ingredients", "meals"
   add_foreign_key "receipt_items", "receipts"
   add_foreign_key "receipts", "orders"
 end

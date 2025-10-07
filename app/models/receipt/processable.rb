@@ -27,10 +27,6 @@ module Receipt::Processable
 
     create_receipt_items!(items_data)
 
-    Rails.logger.info "Auto-matching ingredients..."
-    matches_count = order.auto_match_all_ingredients!
-    Rails.logger.info "Auto-matched #{matches_count} ingredients"
-
     true
   rescue => e
     Rails.logger.error "Failed to process receipt: #{e.message}"

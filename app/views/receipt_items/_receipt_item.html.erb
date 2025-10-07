@@ -19,20 +19,6 @@
           </div>
         </div>
       </div>
-
-      <div class="ml-4">
-        <% if receipt_item.ingredient_matches.any? %>
-          <div class="text-green-600 dark:text-green-400 text-sm">
-            <span class="font-medium">✓ Matched to:</span>
-            <% receipt_item.ingredient_matches.each do |match| %>
-              <div class="mt-1">
-                <span class="text-blue-600 dark:text-blue-400"><%= match.ingredient.name %></span>
-                <span class="text-gray-500 dark:text-gray-400">(confidence: <%= (match.confidence * 100).round(1) %>%)</span>
-              </div>
-            <% end %>
-          </div>
-        <% end %>
-      </div>
     </div>
   <% end %>
 
