@@ -3,24 +3,19 @@
 <div
   id="receipt_item_<%= receipt_item.id %>"
   class="border rounded-md overflow-hidden transition-all hover:shadow-md <%= receipt_item.selected ? selected_receipt_item_class : unselected_receipt_item_class %> relative">
-  <%= button_to order_receipt_item_path(receipt_item.receipt.order, receipt_item),
-    method: :delete,
-    form_class: "absolute top-4 right-4 z-20",
-    class: "rounded-full border-2 border-red-600 p-1 bg-white dark:bg-gray-800" do %>
-    <%= icon "bin", css_class: "w-6 h-6 text-red-600 hover:text-red-500 dark:text-red-700 dark:hover:text-red-600 cursor-pointer" %>
-  <% end %>
 
   <%= button_to order_receipt_item_path(receipt_item.receipt.order, receipt_item),
     method: :patch,
     params: { selected: !receipt_item.selected, split_mode: receipt_item.selected? ? 'theirs' : 'mine' },
     form_class: "w-full",
-    class: "w-full text-left p-4 cursor-pointer" do %>
-    <div class="flex justify-between items-start pr-12">
+    class: "w-full text-left p-4 cursor-pointer",
+    onclick: "if (window.getSelection().toString()) { event.preventDefault(); return false; }" do %>
+    <div class="flex justify-between items-start pr-24">
       <div class="flex items-start space-x-3">
         <div class="flex-1">
-          <h3 class="font-medium text-lg"><%= receipt_item.name %></h3>
+          <h3 class="font-medium text-lg select-text"><%= receipt_item.name %></h3>
           <div class="text-sm text-gray-600 dark:text-gray-400 mt-1">
-            <span>Price: £<%= sprintf("%.2f", receipt_item.price) %></span>
+            <span class="select-text">Price: £<%= sprintf("%.2f", receipt_item.price) %></span>
           </div>
         </div>
       </div>
@@ -40,6 +35,21 @@
       </div>
     </div>
   <% end %>
+
+  <div class="absolute top-4 right-4 z-20 flex space-x-2">
+    <%= button_to toggle_favourite_order_receipt_item_path(receipt_item.receipt.order, receipt_item),
+      method: :post,
+      form_class: "inline-block",
+      class: "rounded-full border-2 border-pink-600 p-1 bg-white dark:bg-gray-800" do %>
+      <%= icon receipt_item.favourite? ? "heart_filled" : "heart_unfilled", css_class: "w-6 h-6 text-pink-600 hover:text-pink-500 dark:text-pink-700 dark:hover:text-pink-600 cursor-pointer" %>
+    <% end %>
+    <%= button_to order_receipt_item_path(receipt_item.receipt.order, receipt_item),
+      method: :delete,
+      form_class: "inline-block",
+      class: "rounded-full border-2 border-red-600 p-1 bg-white dark:bg-gray-800" do %>
+      <%= icon "bin", css_class: "w-6 h-6 text-red-600 hover:text-red-500 dark:text-red-700 dark:hover:text-red-600 cursor-pointer" %>
+    <% end %>
+  </div>
 
   <!-- Split Mode Panel -->
   <div

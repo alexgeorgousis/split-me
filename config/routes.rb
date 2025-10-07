@@ -1,10 +1,15 @@
 Rails.application.routes.draw do
+  resources :favourites
   resources :ingredients
   resources :orders do
     member do
       post :process_receipt
     end
-    resources :receipt_items
+    resources :receipt_items do
+      member do
+        post :toggle_favourite
+      end
+    end
   end
   resources :meals
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

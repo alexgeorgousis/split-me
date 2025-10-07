@@ -30,4 +30,8 @@ class ReceiptItem < ApplicationRecord
       0.0
     end
   end
+
+  def favourite?
+    Favourite.exists?(name: name)
+  end
 end

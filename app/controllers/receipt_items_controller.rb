@@ -34,6 +34,21 @@ class ReceiptItemsController < ApplicationController
     redirect_to order_path(@order)
   end
 
+  def toggle_favourite
+    favourite = Favourite.find_by(name: @receipt_item.name)
+    if favourite
+      favourite.destroy
+    else
+      Favourite.create(name: @receipt_item.name)
+    end
+    respond_to do |format|
+      format.turbo_stream do
+        render turbo_stream: turbo_stream.replace("receipt_item_#{@receipt_item.id}", partial: "receipt_items/receipt_item", locals: { receipt_item: @receipt_item })
+      end
+      format.html { redirect_back(fallback_location: order_path(@order)) }
+    end
+  end
+
   private
 
   def set_order
