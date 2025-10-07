@@ -1,7 +1,5 @@
 class ReceiptItem < ApplicationRecord
   belongs_to :receipt
-  has_many :ingredient_matches, dependent: :destroy
-  has_many :ingredients, through: :ingredient_matches
 
   enum :split_mode, { mine: 0, shared: 1, theirs: 2 }
 

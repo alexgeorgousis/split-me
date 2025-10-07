@@ -1,9 +1,0 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
-pasta_tomato:
-  meal: pasta
-  ingredient: tomato
-
-pizza_cheese:
-  meal: pizza
-  ingredient: cheese

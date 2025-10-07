@@ -56,6 +56,6 @@ class OrdersController < ApplicationController
     end
 
     def order_params
-      params.require(:order).permit(meal_ids: [], receipt_attributes: [ :file ])
+      params.require(:order).permit(receipt_attributes: [ :file ])
     end
 end
