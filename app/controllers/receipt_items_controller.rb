@@ -41,7 +41,12 @@ class ReceiptItemsController < ApplicationController
     else
       Favourite.create(name: @receipt_item.name)
     end
-    redirect_back(fallback_location: order_path(@order))
+    respond_to do |format|
+      format.turbo_stream do
+        render turbo_stream: turbo_stream.replace("receipt_item_#{@receipt_item.id}", partial: "receipt_items/receipt_item", locals: { receipt_item: @receipt_item })
+      end
+      format.html { redirect_back(fallback_location: order_path(@order)) }
+    end
   end
 
   private
