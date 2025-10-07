@@ -34,6 +34,16 @@ class ReceiptItemsController < ApplicationController
     redirect_to order_path(@order)
   end
 
+  def toggle_favourite
+    favourite = Favourite.find_by(name: @receipt_item.name)
+    if favourite
+      favourite.destroy
+    else
+      Favourite.create(name: @receipt_item.name)
+    end
+    redirect_back(fallback_location: order_path(@order))
+  end
+
   private
 
   def set_order

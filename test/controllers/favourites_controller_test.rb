@@ -17,7 +17,7 @@ class FavouritesControllerTest < ActionDispatch::IntegrationTest
 
   test "should create favourite" do
     assert_difference("Favourite.count") do
-      post favourites_url, params: { favourite: { name: @favourite.name, string: @favourite.string } }
+      post favourites_url, params: { favourite: { name: @favourite.name } }
     end
 
     assert_redirected_to favourite_url(Favourite.last)
@@ -34,7 +34,7 @@ class FavouritesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update favourite" do
-    patch favourite_url(@favourite), params: { favourite: { name: @favourite.name, string: @favourite.string } }
+    patch favourite_url(@favourite), params: { favourite: { name: @favourite.name } }
     assert_redirected_to favourite_url(@favourite)
   end
 

@@ -15,7 +15,6 @@ class FavouritesTest < ApplicationSystemTestCase
     click_on "New favourite"
 
     fill_in "Name", with: @favourite.name
-    fill_in "String", with: @favourite.string
     click_on "Create Favourite"
 
     assert_text "Favourite was successfully created"
@@ -27,7 +26,6 @@ class FavouritesTest < ApplicationSystemTestCase
     click_on "Edit this favourite", match: :first
 
     fill_in "Name", with: @favourite.name
-    fill_in "String", with: @favourite.string
     click_on "Update Favourite"
 
     assert_text "Favourite was successfully updated"

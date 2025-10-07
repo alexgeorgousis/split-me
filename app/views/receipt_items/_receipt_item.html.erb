@@ -37,8 +37,8 @@
   <% end %>
 
   <div class="absolute top-4 right-4 z-20 flex space-x-2">
-    <%= button_to "#",
-      method: :patch,
+    <%= button_to toggle_favourite_order_receipt_item_path(receipt_item.receipt.order, receipt_item),
+      method: :post,
       form_class: "inline-block",
       class: "rounded-full border-2 border-pink-600 p-1 bg-white dark:bg-gray-800" do %>
       <%= icon receipt_item.favourite? ? "heart_filled" : "heart_unfilled", css_class: "w-6 h-6 text-pink-600 hover:text-pink-500 dark:text-pink-700 dark:hover:text-pink-600 cursor-pointer" %>
