@@ -2,12 +2,9 @@ module Receipt::Processable
   extend ActiveSupport::Concern
 
   def process_receipt!
-    Rails.logger.info "Checking if receipt is attached..."
     unless file.attached?
-      Rails.logger.error "Receipt not attached"
       return false
     end
-    Rails.logger.info "Receipt is attached"
 
     Rails.logger.info "Extracting text from receipt..."
     text = extract_text_from_receipt
