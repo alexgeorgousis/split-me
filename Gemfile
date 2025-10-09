@@ -20,6 +20,8 @@ gem "tailwindcss-rails"
 gem "jbuilder"
 # PDF parsing for receipt processing [https://github.com/yob/pdf-reader]
 gem "pdf-reader"
+# LLM interface for AI API calls [https://github.com/crmne/ruby_llm]
+gem "ruby_llm"
 
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
 # gem "bcrypt", "~> 3.1.7"
