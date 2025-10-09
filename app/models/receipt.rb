@@ -9,9 +9,7 @@ class Receipt < ApplicationRecord
   delegate :attached?, :filename, :blob, to: :file, allow_nil: true
 
   def process_receipt!
-    text = parse_attached_file
-    items = llm_magic text
-    create_receipt_items! items
+    create_receipt_items_using llm_magic
   end
 
   def processed?
@@ -27,11 +25,11 @@ class Receipt < ApplicationRecord
   end
 
   private
-    def create_receipt_items!(items_data)
+    def create_receipt_items_using(receipt_item_hashes)
       # Clear existing receipt items to avoid duplicates
       receipt_items.destroy_all
 
-      items_data.each_with_index do |item_data, index|
+      receipt_item_hashes.each_with_index do |item_data, index|
         item = receipt_items.build(
           name: item_data[:name],
           price: item_data[:price]

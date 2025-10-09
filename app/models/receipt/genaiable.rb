@@ -1,22 +1,28 @@
 module Receipt::Genaiable
   extend ActiveSupport::Concern
 
-  def llm_magic(text)
-    return [] unless text.present?
+  def llm_magic
+    if file.content_type == "application/pdf"
+      response = ask_llm parse_attached_file
+    else
+      response = ask_llm
+    end
 
-    response = ask_llm(text)
-    receipt_items_json = to_json(response.content)
-    receipt_item_hashes = receipt_items_json.map(&method(:receipt_item_hash_from))
-    receipt_item_hashes
+    receipt_items_json = to_json response.content
+    receipt_items_json.map(&method(:receipt_item_hash_from))
   end
 
   private
-    def ask_llm(text)
+    def ask_llm(raw_receipt_text = nil)
       chat = RubyLLM.chat(model: "claude-sonnet-4")
-      chat.ask(prompt text)
+      if raw_receipt_text.present?
+        chat.ask(prompt raw_receipt_text)
+      else
+        chat.ask prompt, with: file
+      end
     end
 
-    def prompt(text)
+    def prompt(raw_receipt_text = nil)
       <<~PROMPT
         Parse this receipt and extract only the grocery items as JSON.
 
@@ -29,16 +35,15 @@ module Receipt::Genaiable
         - For Sainsbury's receipts, ignore Substitutions and Shorter life sections
         - Clean product names by removing store branding
 
-        Receipt text:
-        #{text}
-
         Return only a valid JSON array with no other text:
         [{"name": "Product Name", "price": 5.50}]
+
+        #{raw_receipt_text if raw_receipt_text.present?}
       PROMPT
     end
 
-    def to_json(text)
-      cleaned = text.gsub(/^```json\s*/, "").gsub(/\s*```$/, "")
+    def to_json(raw_llm_response)
+      cleaned = raw_llm_response.gsub(/^```json\s*/, "").gsub(/\s*```$/, "")
       JSON.parse(cleaned)
     end
 
