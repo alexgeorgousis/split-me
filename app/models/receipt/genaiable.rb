@@ -66,8 +66,9 @@ module Receipt::Genaiable
     uri = URI("https://api.anthropic.com/v1/messages")
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = true
-    # TODO: Insecure - fix SSL issues properly
-    http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+    store = OpenSSL::X509::Store.new
+    store.set_default_paths
+    http.cert_store = store
 
     request = Net::HTTP::Post.new(uri)
     request["Content-Type"] = "application/json"
