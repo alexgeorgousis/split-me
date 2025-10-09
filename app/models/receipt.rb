@@ -1,6 +1,6 @@
 class Receipt < ApplicationRecord
   include Receipt::Parsable
-  include Receipt::Processable
+  include Receipt::Genaiable
 
   belongs_to :order
   has_many :receipt_items, dependent: :destroy
@@ -8,24 +8,40 @@ class Receipt < ApplicationRecord
 
   delegate :attached?, :filename, :blob, to: :file, allow_nil: true
 
+  def process_receipt!
+    text = parse_attached_file
+    items = llm_magic text
+    create_receipt_items! items
+  end
+
+  def processed?
+    receipt_items.any?
+  end
+
+  def receipt_total
+    receipt_items.sum(&:price)
+  end
+
+  def receipt_items_count
+    receipt_items.count
+  end
+
   private
+    def create_receipt_items!(items_data)
+      # Clear existing receipt items to avoid duplicates
+      receipt_items.destroy_all
 
-  def process
-    if file.attached?
-      Rails.logger.info "Processing receipt #{id} for order #{order.id}"
+      items_data.each_with_index do |item_data, index|
+        item = receipt_items.build(
+          name: item_data[:name],
+          price: item_data[:price]
+        )
 
-      begin
-        if process_receipt!
-          Rails.logger.info "Receipt processed successfully"
-          redirect_to review_receipt_order_path(@order), notice: "Receipt processed successfully!"
-        else
-          Rails.logger.error "Receipt processing failed"
-          redirect_to @order, alert: "Failed to process receipt. Please check the file format."
+        item.selected = item.favourite?
+
+        unless item.save
+          raise "Failed to save receipt item: #{item.errors.full_messages.join(', ')}"
         end
-      rescue => e
-        Rails.logger.error "Exception during receipt processing: #{e.class} - #{e.message}"
-        redirect_to @order, alert: "Failed to process receipt: #{e.message}"
       end
     end
-  end
 end

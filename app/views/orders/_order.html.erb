@@ -2,7 +2,7 @@
   <div>
     <strong class="block font-medium mb-1">Total:</strong>
     <% if order.receipt && order.receipt.processed? %>
-      £<%= order.receipt_total_from_items %>
+      £<%= order.receipt_total %>
     <% else %>
       <span class="text-gray-500 dark:text-gray-400">Process receipt to calculate total</span>
     <% end %>

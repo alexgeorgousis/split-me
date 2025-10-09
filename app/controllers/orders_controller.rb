@@ -47,7 +47,7 @@ class OrdersController < ApplicationController
     @order.process_receipt!
     redirect_to order_path(@order), notice: "Receipt processed successfully!"
   rescue => e
-    redirect_to @order, alert: "Failed to process receipt: #{e.message}"
+    redirect_to orders_path, alert: "Failed to process receipt: #{e.message}"
   end
 
   private
