@@ -2,7 +2,6 @@
 
 <div class="md:w-4/5 w-full">
 
-  <!-- Title -->
   <div class="flex items-center mb-6 gap-3">
     <%= link_to "javascript:history.back()", class: "p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors" do %>
       <%= icon "arrow_left", css_class: "w-6 h-6 text-gray-600 dark:text-gray-300" %>
@@ -10,8 +9,7 @@
     <h1 class="font-bold text-2xl sm:text-4xl">Bill Breakdown</h1>
   </div>
 
-  <!-- Receipt File Link -->
-  <% if @order.receipt && @order.receipt.attached? %>
+  <% if @split.receipt && @split.receipt.attached? %>
     <div class="mb-6 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
       <div class="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-2">
         <div class="flex items-center space-x-2">
@@ -19,19 +17,18 @@
           <span class="text-sm font-medium text-blue-900 dark:text-blue-200">Receipt File:</span>
         </div>
         <div class="flex flex-col sm:flex-row sm:items-center sm:space-x-2">
-          <%= link_to @order.receipt.filename, @order.receipt.file, target: "_blank", class: "text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 underline font-medium text-sm break-all" %>
-          <span class="text-blue-700 dark:text-blue-300 text-xs sm:text-sm">(<%= number_to_human_size(@order.receipt.blob.byte_size) %>)</span>
+          <%= link_to @split.receipt.filename, @split.receipt.file, target: "_blank", class: "text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 underline font-medium text-sm break-all" %>
+          <span class="text-blue-700 dark:text-blue-300 text-xs sm:text-sm">(<%= number_to_human_size(@split.receipt.blob.byte_size) %>)</span>
         </div>
       </div>
     </div>
   <% end %>
 
-  <%= render "summary", order: @order %>
+  <%= render "summary", split: @split %>
 
-  <!-- Receipt Items -->
-  <div class="space-y-6" data-controller="update-summary" data-update-summary-receipt-items-value="<%= @order.receipt.receipt_items.to_json %>">
+  <div class="space-y-6" data-controller="update-summary" data-update-summary-receipt-items-value="<%= @split.receipt.receipt_items.to_json %>">
     <h2 class="font-bold text-xl">Receipt Items</h2>
-    <% @order.receipt.receipt_items.each do |receipt_item| %>
+    <% @split.receipt.receipt_items.each do |receipt_item| %>
       <%= render receipt_item %>
     <% end %>
   </div>

@@ -1,5 +1,5 @@
 one:
-  order: one
+  split: one
 
 two:
-  order: two
+  split: two

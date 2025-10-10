@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   resources :favourites
-  resources :orders do
+  resources :splits do
     member do
       post :process_receipt
     end
@@ -21,5 +21,5 @@ Rails.application.routes.draw do
   get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
   # Defines the root path route ("/")
-  root "orders#index"
+  root "splits#index"
 end

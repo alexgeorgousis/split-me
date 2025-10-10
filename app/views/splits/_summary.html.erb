@@ -2,15 +2,15 @@
   <h2 class="font-bold text-xl mb-4">Summary</h2>
   <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
     <div class="text-center">
-      <div class="text-2xl font-bold text-gray-800 dark:text-gray-200">£<%= order.receipt_total %></div>
+      <div class="text-2xl font-bold text-gray-800 dark:text-gray-200">£<%= split.receipt_total %></div>
       <div class="text-sm text-gray-600 dark:text-gray-400">Total</div>
     </div>
     <div class="text-center">
-      <div class="text-2xl font-bold text-green-600 dark:text-green-400">£<%= order.my_receipt_total %></div>
+      <div class="text-2xl font-bold text-green-600 dark:text-green-400">£<%= split.my_receipt_total %></div>
       <div class="text-sm text-gray-600 dark:text-gray-400">Yours</div>
     </div>
     <div class="text-center">
-      <div class="text-2xl font-bold text-orange-600 dark:text-orange-400">£<%= order.their_receipt_total %></div>
+      <div class="text-2xl font-bold text-orange-600 dark:text-orange-400">£<%= split.their_receipt_total %></div>
       <div class="text-sm text-gray-600 dark:text-gray-400">Theirs</div>
     </div>
   </div>

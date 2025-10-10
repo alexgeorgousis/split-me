@@ -1,4 +1,4 @@
-class Order < ApplicationRecord
+class Split < ApplicationRecord
   include Splittable
 
   has_one :receipt, dependent: :destroy

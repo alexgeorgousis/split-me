@@ -2,7 +2,7 @@ class Receipt < ApplicationRecord
   include Receipt::Parsable
   include Receipt::Genaiable
 
-  belongs_to :order
+  belongs_to :split
   has_many :receipt_items, dependent: :destroy
   has_one_attached :file
 

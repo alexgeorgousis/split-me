@@ -1,8 +1,7 @@
-<% content_for :title, "Orders" %>
+<% content_for :title, "Splits" %>
 
 <div class="w-full max-w-3xl mx-auto">
 
-  <!-- Notification -->
   <% if notice.present? %>
     <p class="py-2 px-3 bg-green-50 dark:bg-green-900/30 mb-5 text-green-500 dark:text-green-400 font-medium rounded-md inline-block" id="notice"><%= notice %></p>
   <% end %>
@@ -10,9 +9,8 @@
     <p class="py-2 px-3 bg-red-50 dark:bg-red-900/30 mb-5 text-red-500 dark:text-red-400 font-medium rounded-md inline-block" id="alert"><%= alert %></p>
   <% end %>
 
-  <!-- Upload Receipt Button -->
   <div class="w-full">
-    <%= form_with model: Order.new, multipart: true, local: true, class: "w-full" do |form| %>
+    <%= form_with model: Split.new, multipart: true, local: true, class: "w-full" do |form| %>
       <%= form.fields_for :receipt, Receipt.new do |receipt_form| %>
         <%= receipt_form.file_field :file, accept: "image/*,application/pdf", class: "hidden", id: "receipt-upload", onchange: "this.form.submit()" %>
       <% end %>
@@ -20,26 +18,25 @@
     <% end %>
   </div>
 
-  <!-- Orders List -->
-  <div id="orders" class="space-y-4 mt-6">
-    <% if @orders.any? %>
-      <% @orders.each do |order| %>
+  <div id="splits" class="space-y-4 mt-6">
+    <% if @splits.any? %>
+      <% @splits.each do |split| %>
         <div class="relative">
-          <%= link_to order_path(order), class: "absolute inset-0 z-10" do %>
+          <%= link_to split_path(split), class: "absolute inset-0 z-10" do %>
           <% end %>
-          <%= render order %>
+          <%= render split %>
           <div class="absolute top-4 right-4 z-20 flex space-x-2">
-            <%= link_to edit_order_path(order), class: "rounded-md px-2 py-1.5 text-white bg-blue-600 hover:bg-blue-500 dark:bg-blue-700 dark:hover:bg-blue-600 font-medium cursor-pointer text-sm" do %>
+            <%= link_to edit_split_path(split), class: "rounded-md px-2 py-1.5 text-white bg-blue-600 hover:bg-blue-500 dark:bg-blue-700 dark:hover:bg-blue-600 font-medium cursor-pointer text-sm" do %>
               <%= icon "pencil", css_class: "w-4 h-4" %>
             <% end %>
-            <%= button_to order, method: :delete, class: "rounded-md px-2 py-1.5 text-white bg-red-600 hover:bg-red-500 dark:bg-red-700 dark:hover:bg-red-600 font-medium cursor-pointer text-sm", data: { turbo_confirm: "Are you sure?" } do %>
+            <%= button_to split, method: :delete, class: "rounded-md px-2 py-1.5 text-white bg-red-600 hover:bg-red-500 dark:bg-red-700 dark:hover:bg-red-600 font-medium cursor-pointer text-sm", data: { turbo_confirm: "Are you sure?" } do %>
               <%= icon "bin", css_class: "w-4 h-4" %>
             <% end %>
           </div>
         </div>
       <% end %>
     <% else %>
-      <p class="text-center my-10 text-gray-600 dark:text-gray-400">No orders found.</p>
+      <p class="text-center my-10 text-gray-600 dark:text-gray-400">No splits found.</p>
     <% end %>
   </div>
 </div>
