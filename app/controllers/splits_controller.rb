@@ -35,7 +35,7 @@ class SplitsController < ApplicationController
 
   def destroy
     @split.destroy!
-    redirect_to splits_path, notice: "Split was successfully destroyed.", status: :see_other
+    redirect_to splits_path
   end
 
   def process_receipt
