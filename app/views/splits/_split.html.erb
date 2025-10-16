@@ -2,9 +2,9 @@
   <div>
     <% if split.receipt && split.receipt.processed? %>
       <strong class="font-large">Total:</strong>
-      £<%= split.receipt_total %>
+      <span>£<%= split.receipt_total %></span>
   <% else %>
-    <span class="text-gray-500 dark:text-gray-400">Process receipt to calculate total</span>
+    <span class="text-gray-500 dark:text-gray-400">Process receipt to begin splitting!</span>
   <% end %>
   </div>
 
