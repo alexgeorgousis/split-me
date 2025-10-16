@@ -1,6 +1,6 @@
 class Receipt < ApplicationRecord
-  include Receipt::Parsable
-  include Receipt::Genaiable
+  include Parsable
+  include Genaiable
 
   belongs_to :split
   has_many :receipt_items, dependent: :destroy
