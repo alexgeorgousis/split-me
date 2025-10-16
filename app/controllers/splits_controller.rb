@@ -44,7 +44,7 @@ class SplitsController < ApplicationController
       return
     end
 
-    @split.process!
+    @split.process_receipt!
     redirect_to split_path(@split), notice: "Receipt processed successfully!"
   rescue => e
     redirect_to splits_path, alert: "Failed to process receipt: #{e.message}"
