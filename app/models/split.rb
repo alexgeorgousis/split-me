@@ -5,5 +5,5 @@ class Split < ApplicationRecord
   accepts_nested_attributes_for :receipt, allow_destroy: true
 
   delegate :processed?, to: :receipt, prefix: true, allow_nil: true
-  delegate :receipt_total, :receipt_items_count, :process_receipt!, to: :receipt, allow_nil: true
+  delegate :receipt_total, :receipt_items_count, :process!, to: :receipt, allow_nil: true
 end

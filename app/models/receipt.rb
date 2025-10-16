@@ -8,7 +8,7 @@ class Receipt < ApplicationRecord
 
   delegate :attached?, :filename, :blob, to: :file, allow_nil: true
 
-  def process_receipt!
+  def process!
     create_receipt_items_using llm_magic
   end
 

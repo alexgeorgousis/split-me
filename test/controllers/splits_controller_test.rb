@@ -61,9 +61,10 @@ class SplitsControllerTest < ActionDispatch::IntegrationTest
     split = Split.create!(receipt_attributes: { file: fixture_file_upload("test_receipt.pdf", "application/pdf") })
 
     response_json = "[{\"name\": \"Test Item\", \"price\": 1.50}, {\"name\": \"Another Item\", \"price\": 2.50}]"
+    mock_response = Struct.new(:content).new(response_json)
 
     Receipt.prepend(Module.new do
-      define_method(:call_claude_api) { |prompt| response_json }
+      define_method(:ask_llm) { |raw_receipt_text = nil| mock_response }
     end)
 
     post process_receipt_split_url(split)
