@@ -2,6 +2,9 @@ class ReceiptItemsController < ApplicationController
   before_action :set_split
   before_action :set_receipt_item
 
+  def show
+  end
+
   def update
     if @receipt_item.update(receipt_item_params)
       respond_to do |format|
@@ -35,12 +38,13 @@ class ReceiptItemsController < ApplicationController
   end
 
   def toggle_favourite
-    favourite = Favourite.find_by(name: @receipt_item.name)
+    favourite = Favourite.owned_by_user.find_by name: @receipt_item.name
     if favourite
       favourite.destroy
     else
-      Favourite.create(name: @receipt_item.name)
+      Favourite.owned_by_user.create! name: @receipt_item.name
     end
+
     respond_to do |format|
       format.turbo_stream do
         render turbo_stream: turbo_stream.replace("receipt_item_#{@receipt_item.id}", partial: "receipt_items/receipt_item", locals: { receipt_item: @receipt_item })
@@ -52,7 +56,7 @@ class ReceiptItemsController < ApplicationController
   private
 
   def set_split
-    @split = Split.find(params[:split_id])
+    @split = Split.owned_by_user.find params[:split_id]
   end
 
   def set_receipt_item

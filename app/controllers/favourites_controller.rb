@@ -1,53 +1,38 @@
 class FavouritesController < ApplicationController
   before_action :set_favourite, only: %i[ show edit update destroy ]
 
-  # GET /favourites or /favourites.json
   def index
-    @favourites = Favourite.all
+    @favourites = Favourite.owned_by_user
   end
 
-  # GET /favourites/1 or /favourites/1.json
   def show
   end
 
-  # GET /favourites/new
   def new
     @favourite = Favourite.new
   end
 
-  # GET /favourites/1/edit
   def edit
   end
 
-  # POST /favourites or /favourites.json
   def create
-    @favourite = Favourite.new(favourite_params)
+    @favourite = Favourite.owned_by_user.build favourite_params
 
-    respond_to do |format|
-      if @favourite.save
-        format.html { redirect_to @favourite, notice: "Favourite was successfully created." }
-        format.json { render :show, status: :created, location: @favourite }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @favourite.errors, status: :unprocessable_entity }
-      end
+    if @favourite.save
+      redirect_to @favourite, notice: "Favourite was successfully created."
+    else
+      render :new, status: :unprocessable_entity
     end
   end
 
-  # PATCH/PUT /favourites/1 or /favourites/1.json
   def update
-    respond_to do |format|
-      if @favourite.update(favourite_params)
-        format.html { redirect_to @favourite, notice: "Favourite was successfully updated.", status: :see_other }
-        format.json { render :show, status: :ok, location: @favourite }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @favourite.errors, status: :unprocessable_entity }
-      end
+    if @favourite.update(favourite_params)
+      redirect_to @favourite, notice: "Favourite was successfully updated.", status: :see_other
+    else
+      render :edit, status: :unprocessable_entity
     end
   end
 
-  # DELETE /favourites/1 or /favourites/1.json
   def destroy
     @favourite.destroy!
 
@@ -58,12 +43,10 @@ class FavouritesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
     def set_favourite
-      @favourite = Favourite.find(params.expect(:id))
+      @favourite = Favourite.owned_by_user.find params[:id]
     end
 
-    # Only allow a list of trusted parameters through.
     def favourite_params
       params.expect(favourite: [ :name ])
     end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_10_16_161212) do
+ActiveRecord::Schema[8.1].define(version: 2025_09_27_190731) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -43,6 +43,8 @@ ActiveRecord::Schema[8.1].define(version: 2025_10_16_161212) do
     t.datetime "created_at", null: false
     t.string "name"
     t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
+    t.index ["user_id"], name: "index_favourites_on_user_id"
   end
 
   create_table "receipt_items", force: :cascade do |t|
@@ -76,6 +78,8 @@ ActiveRecord::Schema[8.1].define(version: 2025_10_16_161212) do
     t.datetime "created_at", null: false
     t.decimal "total"
     t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
+    t.index ["user_id"], name: "index_splits_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -88,7 +92,9 @@ ActiveRecord::Schema[8.1].define(version: 2025_10_16_161212) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "favourites", "users"
   add_foreign_key "receipt_items", "receipts"
   add_foreign_key "receipts", "splits"
   add_foreign_key "sessions", "users"
+  add_foreign_key "splits", "users"
 end

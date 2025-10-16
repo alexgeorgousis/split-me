@@ -9,12 +9,14 @@
     <p class="py-2 px-3 bg-red-50 dark:bg-red-900/30 mb-5 text-red-500 dark:text-red-400 font-medium rounded-md inline-block" id="alert"><%= alert %></p>
   <% end %>
 
-  <div class="w-full">
-    <%= form_with model: Split.new, multipart: true, local: true, class: "w-full" do |form| %>
+  <div class="w-full flex justify-center">
+    <%= form_with model: Split.new, multipart: true, local: true do |form| %>
       <%= form.fields_for :receipt, Receipt.new do |receipt_form| %>
         <%= receipt_form.file_field :file, accept: "image/*,application/pdf", class: "hidden", id: "receipt-upload", onchange: "this.form.submit()" %>
       <% end %>
-      <%= form.button "Upload Receipt", type: "button", onclick: "document.getElementById('receipt-upload').click()", class: "rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 dark:bg-blue-700 dark:hover:bg-blue-600 text-white block font-medium text-center w-full cursor-pointer" %>
+      <%= form.button type: "button", onclick: "document.getElementById('receipt-upload').click()", class: "p-2 rounded-full bg-green-600 hover:bg-green-500 dark:bg-green-700 dark:hover:bg-green-600 transition cursor-pointer" do %>
+        <%= icon "plus", css_class: "w-6 h-6 text-white" %>
+      <% end %>
     <% end %>
   </div>
 
@@ -36,7 +38,7 @@
         </div>
       <% end %>
     <% else %>
-      <p class="text-center my-10 text-gray-600 dark:text-gray-400">No splits found.</p>
+      <p class="text-center my-10 text-gray-600 dark:text-gray-400">Click the + button to upload a receipt</p>
     <% end %>
   </div>
 </div>
