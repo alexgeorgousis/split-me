@@ -24,8 +24,12 @@
       </div>
 
       <div class="mt-4 text-sm text-gray-500 sm:mt-0">
-        <%= link_to "Forgot password?", new_password_path, class: "text-gray-700 underline hover:no-underline" %>
+        <%= link_to "Forgot password?", new_password_path, class: "text-gray-500 underline hover:no-underline" %>
       </div>
     </div>
   <% end %>
+
+  <div class="mt-6 text-sm text-white">
+    Don't have an account? <%= link_to "Sign up", new_user_path, class: "text-gray-500 underline hover:no-underline" %>
+  </div>
 </div>

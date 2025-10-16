@@ -3,6 +3,7 @@ require "test_helper"
 class SplitsControllerTest < ActionDispatch::IntegrationTest
   setup do
     @split = splits(:one)
+    sign_in_as users(:one)
   end
 
   test "should get index" do
