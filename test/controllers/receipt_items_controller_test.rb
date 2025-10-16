@@ -4,6 +4,7 @@ class ReceiptItemsControllerTest < ActionDispatch::IntegrationTest
   setup do
     @split = splits(:one)
     @receipt_item = @split.receipt.receipt_items.first
+    sign_in_as users(:one)
   end
 
   test "should update split_mode" do

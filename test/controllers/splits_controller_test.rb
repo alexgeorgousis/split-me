@@ -3,6 +3,7 @@ require "test_helper"
 class SplitsControllerTest < ActionDispatch::IntegrationTest
   setup do
     @split = splits(:one)
+    sign_in_as users(:one)
   end
 
   test "should get index" do
@@ -58,7 +59,7 @@ class SplitsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should process receipt successfully" do
-    split = Split.create!(receipt_attributes: { file: fixture_file_upload("test_receipt.pdf", "application/pdf") })
+    split = Split.create!(user: users(:one), receipt_attributes: { file: fixture_file_upload("test_receipt.pdf", "application/pdf") })
 
     response_json = "[{\"name\": \"Test Item\", \"price\": 1.50}, {\"name\": \"Another Item\", \"price\": 2.50}]"
     mock_response = Struct.new(:content).new(response_json)
@@ -78,7 +79,7 @@ class SplitsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should fail to process receipt when no receipt attached" do
-    split = Split.create!
+    split = Split.create!(user: users(:one))
 
     post process_receipt_split_url(split)
 

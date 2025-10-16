@@ -10,26 +10,26 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_10_183334) do
+ActiveRecord::Schema[8.1].define(version: 2025_09_27_190731) do
   create_table "active_storage_attachments", force: :cascade do |t|
-    t.string "name", null: false
-    t.string "record_type", null: false
-    t.bigint "record_id", null: false
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
+    t.string "name", null: false
+    t.bigint "record_id", null: false
+    t.string "record_type", null: false
     t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
     t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
   end
 
   create_table "active_storage_blobs", force: :cascade do |t|
-    t.string "key", null: false
-    t.string "filename", null: false
-    t.string "content_type"
-    t.text "metadata"
-    t.string "service_name", null: false
     t.bigint "byte_size", null: false
     t.string "checksum"
+    t.string "content_type"
     t.datetime "created_at", null: false
+    t.string "filename", null: false
+    t.string "key", null: false
+    t.text "metadata"
+    t.string "service_name", null: false
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
 
@@ -40,37 +40,61 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_10_183334) do
   end
 
   create_table "favourites", force: :cascade do |t|
-    t.string "name"
     t.datetime "created_at", null: false
+    t.string "name"
     t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
+    t.index ["user_id"], name: "index_favourites_on_user_id"
   end
 
   create_table "receipt_items", force: :cascade do |t|
+    t.datetime "created_at", null: false
     t.string "name"
     t.decimal "price", default: "0.0", null: false
     t.integer "receipt_id", null: false
     t.boolean "selected", default: false, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.integer "split_mode", default: 0
+    t.datetime "updated_at", null: false
     t.index ["receipt_id"], name: "index_receipt_items_on_receipt_id"
   end
 
   create_table "receipts", force: :cascade do |t|
-    t.integer "split_id", null: false
     t.datetime "created_at", null: false
+    t.integer "split_id", null: false
     t.datetime "updated_at", null: false
     t.index ["split_id"], name: "index_receipts_on_split_id"
   end
 
-  create_table "splits", force: :cascade do |t|
-    t.decimal "total"
+  create_table "sessions", force: :cascade do |t|
     t.datetime "created_at", null: false
+    t.string "ip_address"
     t.datetime "updated_at", null: false
+    t.string "user_agent"
+    t.integer "user_id", null: false
+    t.index ["user_id"], name: "index_sessions_on_user_id"
+  end
+
+  create_table "splits", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.decimal "total"
+    t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
+    t.index ["user_id"], name: "index_splits_on_user_id"
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "email_address", null: false
+    t.string "password_digest", null: false
+    t.datetime "updated_at", null: false
+    t.index ["email_address"], name: "index_users_on_email_address", unique: true
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "favourites", "users"
   add_foreign_key "receipt_items", "receipts"
   add_foreign_key "receipts", "splits"
+  add_foreign_key "sessions", "users"
+  add_foreign_key "splits", "users"
 end

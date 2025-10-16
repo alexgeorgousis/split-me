@@ -1,11 +1,11 @@
 <div id="<%= dom_id split %>" class="w-full border border-gray-200 dark:border-gray-700 rounded-lg p-6 space-y-4 bg-white dark:bg-gray-800 hover:shadow-md dark:hover:shadow-gray-900/50 transition-shadow">
   <div>
-    <strong class="block font-medium mb-1">Total:</strong>
     <% if split.receipt && split.receipt.processed? %>
-      £<%= split.receipt_total %>
-    <% else %>
-      <span class="text-gray-500 dark:text-gray-400">Process receipt to calculate total</span>
-    <% end %>
+      <strong class="font-large">Total:</strong>
+      <span>£<%= split.receipt_total %></span>
+  <% else %>
+    <span class="text-gray-500 dark:text-gray-400">Process receipt to begin splitting!</span>
+  <% end %>
   </div>
 
   <div>

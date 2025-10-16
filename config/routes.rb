@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  resource :session
+  resources :passwords, param: :token
+  resources :users, only: [ :new, :create ]
   resources :favourites
   resources :splits do
     member do

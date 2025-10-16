@@ -2,7 +2,7 @@ class SplitsController < ApplicationController
   before_action :set_split, only: %i[ show edit update destroy process_receipt ]
 
   def index
-    @splits = Split.all
+    @splits = Split.owned_by_user
   end
 
   def show
@@ -16,7 +16,7 @@ class SplitsController < ApplicationController
   end
 
   def create
-    @split = Split.new(split_params)
+    @split = Split.owned_by_user.build split_params
 
     if @split.save
       redirect_to splits_path, notice: "Split was successfully created."
@@ -52,7 +52,7 @@ class SplitsController < ApplicationController
 
   private
     def set_split
-      @split = Split.find(params.expect(:id))
+      @split = Split.owned_by_user.find params[:id]
     end
 
     def split_params
