@@ -36,7 +36,7 @@
     <% end %>
   </div>
 
-  <div class="border-t border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-4 py-3 <%= receipt_item.undecided? ? 'hidden' : 'block' %>">
+  <div class="border-t border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-4 py-3 <%= receipt_item.undecided? ? 'hidden' : 'block' %>" data-controller="assign-item-modal">
     <div class="flex items-center justify-between mb-2">
       <span
         class="text-xs text-gray-500 dark:text-gray-400">Your share: £<%= receipt_item.my_share %>
@@ -59,6 +59,24 @@
         <%= icon "people", css_class: "w-6 h-6 relative z-10 #{receipt_item.shared? ? 'text-orange-600 dark:text-orange-400' : 'text-gray-600 dark:text-gray-400'}" %>
       <% end %>
 
+      <button type="button"
+        data-action="click->assign-item-modal#open"
+        class="rounded-full border-2 p-2 transition-all cursor-pointer border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 hover:border-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20">
+        <%= icon "user_plus", css_class: "w-6 h-6 text-gray-600 dark:text-gray-400" %>
+      </button>
+
+    </div>
+
+    <div data-assign-item-modal-target="modal" class="hidden fixed inset-0 z-50 flex items-center justify-center">
+      <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" data-action="click->assign-item-modal#close"></div>
+      <div class="relative bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 max-w-md w-full mx-4">
+        <h2 class="text-xl font-bold mb-4">Assign to someone</h2>
+        <input type="text" placeholder="Enter person's name" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+        <div class="flex justify-end gap-2 mt-4">
+          <button type="button" data-action="click->assign-item-modal#close" class="px-4 py-2 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg cursor-pointer">Cancel</button>
+          <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 cursor-pointer">Assign</button>
+        </div>
+      </div>
     </div>
   </div>
 </div>
