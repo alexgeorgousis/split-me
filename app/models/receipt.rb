@@ -35,7 +35,9 @@ class Receipt < ApplicationRecord
           price: item_data[:price]
         )
 
-        item.selected = item.favourite?
+        if item.favourite?
+          item.split_mode = "mine"
+        end
 
         unless item.save
           raise "Failed to save receipt item: #{item.errors.full_messages.join(', ')}"

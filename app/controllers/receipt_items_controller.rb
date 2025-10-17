@@ -64,6 +64,6 @@ class ReceiptItemsController < ApplicationController
   end
 
   def receipt_item_params
-    params.permit(:split_mode, :selected)
+    params.permit(:split_mode)
   end
 end

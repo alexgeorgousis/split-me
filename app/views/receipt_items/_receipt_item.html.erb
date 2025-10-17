@@ -1,12 +1,10 @@
-<% selected_receipt_item_class = "border-blue-400 dark:border-blue-600 bg-blue-50 dark:bg-blue-900/20" %>
-<% unselected_receipt_item_class = "border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800" %>
 <div
   id="receipt_item_<%= receipt_item.id %>"
-  class="border rounded-md overflow-hidden transition-all hover:shadow-md <%= receipt_item.selected ? selected_receipt_item_class : unselected_receipt_item_class %> relative">
+  class="border rounded-md overflow-hidden transition-all hover:shadow-md <%= receipt_item.undecided? ? "border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800" : "border-blue-400 dark:border-blue-600 bg-blue-50 dark:bg-blue-900/20" %> relative">
 
   <%= button_to split_receipt_item_path(receipt_item.receipt.split, receipt_item),
     method: :patch,
-    params: { selected: !receipt_item.selected, split_mode: receipt_item.selected? ? 'theirs' : 'mine' },
+    params: { split_mode: receipt_item.undecided? ? 'mine' : 'undecided' },
     form_class: "w-full",
     class: "w-full text-left p-4 cursor-pointer",
     onclick: "if (window.getSelection().toString()) { event.preventDefault(); return false; }" do %>
@@ -38,8 +36,7 @@
     <% end %>
   </div>
 
-  <div
-    class="border-t border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-4 py-3 <%= receipt_item.selected? ? 'block' : 'hidden' %>">
+  <div class="border-t border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-4 py-3 <%= receipt_item.undecided? ? 'hidden' : 'block' %>">
     <div class="flex items-center justify-between mb-2">
       <span
         class="text-xs text-gray-500 dark:text-gray-400">Your share: £<%= receipt_item.my_share_amount %>
