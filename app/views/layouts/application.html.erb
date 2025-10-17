@@ -23,7 +23,7 @@
   </head>
 
   <body class="bg-white dark:bg-gray-900 dark:text-gray-100">
-    <% if Current.user %>
+    <% if authenticated? %>
       <div class="fixed top-4 right-4">
         <%= button_to session_path, method: :delete, class: "p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition cursor-pointer" do %>
           <%= icon "logout", css_class: "w-6 h-6 text-gray-700 dark:text-gray-300" %>
