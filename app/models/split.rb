@@ -1,6 +1,4 @@
 class Split < ApplicationRecord
-  include Splittable
-
   belongs_to :user
   has_one :receipt, dependent: :destroy
   accepts_nested_attributes_for :receipt, allow_destroy: true
@@ -14,5 +12,14 @@ class Split < ApplicationRecord
 
   def process_receipt!
     receipt.process!
+  end
+
+  def my_receipt_total
+    receipt.receipt_items.where(split_mode: "mine").sum(&:my_share_amount)
+  end
+
+  def their_receipt_total
+    total = receipt.receipt_items.sum(:price)
+    total - my_receipt_total
   end
 end
