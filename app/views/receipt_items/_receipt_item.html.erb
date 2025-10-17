@@ -46,32 +46,20 @@
     </span>
     </div>
 
-    <div class="flex flex-row space-x-2">
+    <div class="flex flex-row justify-evenly">
 
-      <% common_base_button_class = "w-full group relative overflow-hidden rounded-lg border-2 transition-all px-3 py-4 text-center cursor-pointer" %>
-      <% common_selected_button_class = "text-white" %>
-      <% common_unselected_button_class = "border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300" %>
-
-      <% selected_mine_button_class = "border-green-400 bg-green-50 dark:bg-green-900/20" %>
-      <% unselected_mine_button_class = "hover:border-green-600 hover:bg-green-50 dark:hover:bg-green-900/20" %>
       <%= button_to split_receipt_item_path(receipt_item.receipt.split, receipt_item),
         method: :patch,
         params: { split_mode: "mine" },
-        form_class: "flex-1",
-        class: "#{ common_base_button_class } #{ receipt_item.split_mode == 'mine' ? common_selected_button_class + ' ' + selected_mine_button_class : common_unselected_button_class + ' ' + unselected_mine_button_class }" do %>
-        <div class="text-sm font-semibold">Mine</div>
+        class: "rounded-full border-2 p-2 transition-all cursor-pointer #{receipt_item.split_mode == 'mine' ? 'border-green-400 bg-green-50 dark:bg-green-900/20' : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 hover:border-green-600 hover:bg-green-50 dark:hover:bg-green-900/20'}" do %>
+        <%= icon "hand_raised", css_class: "w-6 h-6 #{receipt_item.split_mode == 'mine' ? 'text-green-600 dark:text-green-400' : 'text-gray-600 dark:text-gray-400'}" %>
       <% end %>
 
-      <% selected_shared_button_class = "border-yellow-400 border-b-0 bg-yellow-50 dark:bg-yellow-900/20" %>
-      <% unselected_shared_button_class = "hover:border-yellow-600 hover:border-b-0 border-b-0 hover:bg-yellow-50 dark:hover:bg-yellow-900/20" %>
       <%= button_to split_receipt_item_path(receipt_item.receipt.split, receipt_item),
         method: :patch,
         params: { split_mode: "shared" },
-        form_class: "flex-1",
-        class: "#{ common_base_button_class } #{ receipt_item.split_mode == 'shared' ? common_selected_button_class + ' ' + selected_shared_button_class : common_unselected_button_class + ' ' + unselected_shared_button_class }" do %>
-        <div class="text-sm font-semibold">Shared</div>
-        <div class="absolute bottom-0 left-0 w-1/2 h-1 bg-green-400"></div>
-        <div class="absolute bottom-0 right-0 w-1/2 h-1 bg-yellow-400"></div>
+        class: "rounded-full border-2 p-2 transition-all cursor-pointer relative overflow-hidden #{receipt_item.split_mode == 'shared' ? 'border-green-400' : 'border-gray-300 dark:border-gray-600 hover:border-yellow-600 hover:bg-yellow-50 dark:hover:bg-yellow-900/20'}" do %>
+        <%= icon "people", css_class: "w-6 h-6 relative z-10 #{receipt_item.split_mode == 'shared' ? 'text-orange-600 dark:text-orange-400' : 'text-gray-600 dark:text-gray-400'}" %>
       <% end %>
 
     </div>
