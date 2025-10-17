@@ -2,15 +2,17 @@
 
 <div class="md:w-4/5 w-full">
 
-  <div class="flex items-center mb-6 gap-3">
-    <%= link_to "javascript:history.back()", class: "p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors" do %>
-      <%= icon "arrow_left", css_class: "w-6 h-6 text-gray-600 dark:text-gray-300" %>
-    <% end %>
-    <h1 class="font-bold text-2xl sm:text-4xl">Split Breakdown</h1>
+  <div class="w-full sticky top-0 bg-gray-900 pt-4 pb-4 z-30">
+    <div class="flex items-center gap-3">
+      <%= link_to "javascript:history.back()", class: "p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors" do %>
+        <%= icon "arrow_left", css_class: "w-6 h-6 text-gray-600 dark:text-gray-300" %>
+      <% end %>
+      <h1 class="font-bold text-2xl sm:text-4xl">Split Breakdown</h1>
+    </div>
   </div>
 
   <% if @split.receipt && @split.receipt.attached? %>
-    <div class="mb-6 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+    <div class="my-6 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
       <div class="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-2">
         <div class="flex items-center space-x-2">
           <%= icon "document", css_class: "w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0" %>
