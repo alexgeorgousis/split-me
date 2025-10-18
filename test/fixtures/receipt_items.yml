@@ -1,11 +1,19 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  name: one
-  price: 9.99
+mine:
+  name: my item
+  price: 10.0
+  split_mode: mine
   receipt: one
 
-two:
-  name: two
-  price: 9.99
-  receipt: two
+shared:
+  name: shared item
+  price: 20.0
+  split_mode: shared
+  receipt: one
+
+undecided:
+  name: undecided item
+  price: 30.0
+  split_mode: undecided
+  receipt: one

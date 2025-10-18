@@ -4,7 +4,7 @@ class Split < ApplicationRecord
   accepts_nested_attributes_for :receipt, allow_destroy: true
 
   delegate :processed?, to: :receipt, prefix: true, allow_nil: true
-  delegate :receipt_total, :receipt_items_count, to: :receipt, allow_nil: true
+  delegate :receipt_items_count, to: :receipt, allow_nil: true
 
   def self.owned_by_user(user: Current.user)
     user.splits
@@ -14,12 +14,15 @@ class Split < ApplicationRecord
     receipt.process!
   end
 
-  def my_receipt_total
-    receipt.receipt_items.where(split_mode: "mine").sum(&:my_share_amount)
+  def total
+    receipt.total
   end
 
-  def their_receipt_total
-    total = receipt.receipt_items.sum(:price)
-    total - my_receipt_total
+  def my_total
+    receipt.my_total
+  end
+
+  def their_total
+    receipt.their_total
   end
 end

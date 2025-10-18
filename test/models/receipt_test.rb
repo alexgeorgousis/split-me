@@ -1,19 +1,19 @@
 require "test_helper"
 
-class SplitTest < ActiveSupport::TestCase
+class ReceiptTest < ActiveSupport::TestCase
   setup do
-    @split = splits(:one)
+    @receipt = receipts(:one)
   end
 
   test "calculates total correctly" do
-    assert_equal 60, @split.total
+    assert_equal 60, @receipt.total
   end
 
   test "calculates my total correctly" do
-    assert_equal 20, @split.my_total
+    assert_equal 20, @receipt.my_total
   end
 
   test "calculates their total correctly" do
-    assert_equal 40, @split.their_total
+    assert_equal 40, @receipt.their_total
   end
 end

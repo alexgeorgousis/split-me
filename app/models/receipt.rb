@@ -16,8 +16,16 @@ class Receipt < ApplicationRecord
     receipt_items.any?
   end
 
-  def receipt_total
+  def total
     receipt_items.sum(&:price)
+  end
+
+  def my_total
+    receipt_items.sum(&:my_share)
+  end
+
+  def their_total
+    receipt_items.sum(&:their_share)
   end
 
   def receipt_items_count
@@ -26,22 +34,9 @@ class Receipt < ApplicationRecord
 
   private
     def create_receipt_items_using(receipt_item_hashes)
-      # Clear existing receipt items to avoid duplicates
-      receipt_items.destroy_all
-
-      receipt_item_hashes.each_with_index do |item_data, index|
-        item = receipt_items.build(
-          name: item_data[:name],
-          price: item_data[:price]
-        )
-
-        if item.favourite?
-          item.split_mode = "mine"
-        end
-
-        unless item.save
-          raise "Failed to save receipt item: #{item.errors.full_messages.join(', ')}"
-        end
+      receipt_item_hashes.each do |item_data|
+        item = receipt_items.create! name: item_data[:name], price: item_data[:price]
+        item.mine! if item.favourite?
       end
     end
 end
