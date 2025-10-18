@@ -1,7 +1,6 @@
 <% content_for :title, "Split" %>
 
-<div class="md:w-4/5 w-full">
-<div class="w-full max-w-3xl mx-auto">
+<div class="w-full max-w-3xl mx-auto" data-controller="select-split-modal">
 
   <div class="w-full sticky top-0 bg-gray-900 pt-4 pb-4 z-30">
     <div class="flex items-center gap-3">
@@ -30,5 +29,21 @@
     <% @split.receipt.receipt_items.each do |receipt_item| %>
       <%= render receipt_item %>
     <% end %>
+  </div>
+
+  <div data-select-split-modal-target="modal" class="hidden fixed inset-0 z-[100] flex items-center justify-center">
+    <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" data-action="click->select-split-modal#close"></div>
+    <div class="relative bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 max-w-md w-full mx-4">
+      <h2 class="text-xl font-bold mb-4">Split Between How Many People?</h2>
+      <select id="people-count" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+        <% (2..10).each do |num| %>
+          <option value="<%= num %>"><%= num %> people</option>
+        <% end %>
+      </select>
+      <div class="flex justify-end gap-2 mt-4">
+        <button type="button" data-action="click->select-split-modal#close" class="px-4 py-2 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg cursor-pointer">Cancel</button>
+        <button type="button" data-action="click->select-split-modal#confirm" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 cursor-pointer">Confirm</button>
+      </div>
+    </div>
   </div>
 </div>
