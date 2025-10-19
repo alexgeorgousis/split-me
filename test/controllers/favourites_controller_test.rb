@@ -46,4 +46,9 @@ class FavouritesControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to favourites_url
   end
+
+  test "should not allow access to other users' favourites" do
+    get favourite_url(favourites(:two))
+    assert_response :not_found
+  end
 end

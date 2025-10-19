@@ -58,6 +58,11 @@ class SplitsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to splits_url
   end
 
+  test "should not allow access to other users' splits" do
+    get split_url(splits(:two))
+    assert_response :not_found
+  end
+
   test "should process receipt successfully" do
     split = Split.create!(user: users(:one), receipt_attributes: { file: fixture_file_upload("test_receipt.pdf", "application/pdf") })
 
