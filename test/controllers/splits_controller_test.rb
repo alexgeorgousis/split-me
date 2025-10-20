@@ -76,7 +76,6 @@ class SplitsControllerTest < ActionDispatch::IntegrationTest
     post process_receipt_split_url(split)
 
     assert_redirected_to split_url(split)
-    assert_equal "Receipt processed successfully!", flash[:notice]
 
     split.reload
     assert split.receipt.processed?
@@ -84,9 +83,7 @@ class SplitsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should fail to process receipt when no receipt attached" do
-    split = Split.create!(user: users(:one))
-
-    post process_receipt_split_url(split)
+    post process_receipt_split_url(@split)
 
     assert_redirected_to splits_url
     assert_equal "No receipt file attached.", flash[:alert]

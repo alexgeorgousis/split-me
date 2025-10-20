@@ -19,7 +19,7 @@ class SplitsController < ApplicationController
     @split = Split.owned_by_user.build split_params
 
     if @split.save
-      redirect_to splits_path, notice: "Split was successfully created."
+      redirect_to splits_path
     else
       render :new, status: :unprocessable_entity
     end
@@ -27,7 +27,7 @@ class SplitsController < ApplicationController
 
   def update
     if @split.update(split_params)
-      redirect_to splits_path, notice: "Split was successfully updated.", status: :see_other
+      redirect_to splits_path, status: :see_other
     else
       render :edit, status: :unprocessable_entity
     end
@@ -39,13 +39,12 @@ class SplitsController < ApplicationController
   end
 
   def process_receipt
-    unless @split.receipt&.file&.attached?
+    if @split.receipt&.file&.attached?
+      @split.process_receipt!
+      redirect_to split_path(@split)
+    else
       redirect_to splits_path, alert: "No receipt file attached."
-      return
     end
-
-    @split.process_receipt!
-    redirect_to split_path(@split), notice: "Receipt processed successfully!"
   rescue => e
     redirect_to splits_path, alert: "Failed to process receipt: #{e.message}"
   end

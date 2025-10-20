@@ -19,7 +19,7 @@ class FavouritesController < ApplicationController
     @favourite = Favourite.owned_by_user.build favourite_params
 
     if @favourite.save
-      redirect_to @favourite, notice: "Favourite was successfully created."
+      redirect_to @favourite
     else
       render :new, status: :unprocessable_entity
     end
@@ -27,7 +27,7 @@ class FavouritesController < ApplicationController
 
   def update
     if @favourite.update(favourite_params)
-      redirect_to @favourite, notice: "Favourite was successfully updated.", status: :see_other
+      redirect_to @favourite, status: :see_other
     else
       render :edit, status: :unprocessable_entity
     end
@@ -37,7 +37,7 @@ class FavouritesController < ApplicationController
     @favourite.destroy!
 
     respond_to do |format|
-      format.html { redirect_to favourites_path, notice: "Favourite was successfully destroyed.", status: :see_other }
+      format.html { redirect_to favourites_path, status: :see_other }
       format.json { head :no_content }
     end
   end
