@@ -5,14 +5,14 @@ class ReceiptItem < ApplicationRecord
 
   def my_share
     case
-    when mine? then price
-    when shared? then price / 2
+    when mine? then price.round(2)
+    when shared? then (price / 2).round(2)
     when undecided? then 0.0
     end
   end
 
   def their_share
-    price - my_share
+    (price - my_share).round(2)
   end
 
   def favourite?
