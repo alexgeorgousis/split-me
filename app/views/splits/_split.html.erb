@@ -1,10 +1,10 @@
-<div id="<%= dom_id split %>" class="w-full border border-gray-200 dark:border-gray-700 rounded-lg p-6 space-y-4 bg-white dark:bg-gray-800 hover:shadow-md dark:hover:shadow-gray-900/50 transition-shadow">
+<div id="<%= dom_id split %>" class="w-full border border-gray-700 rounded-lg p-6 space-y-4 bg-gray-800 hover:shadow-md hover:shadow-gray-900/50 transition-shadow">
   <div>
     <% if split.receipt && split.receipt.processed? %>
       <strong class="font-large">Total:</strong>
       <span>£<%= split.total %></span>
     <% else %>
-      <span class="text-gray-500 dark:text-gray-400">Process receipt to begin splitting!</span>
+      <span class="text-gray-400">Process receipt to begin splitting!</span>
     <% end %>
   </div>
 
@@ -12,15 +12,15 @@
     <% if split.receipt %>
       <% if split.receipt.processed? %>
         <div class="space-y-2">
-          <p class="text-green-600 dark:text-green-400">✓ Receipt processed (<%= split.receipt_items_count %> items found)</p>
+          <p class="text-green-400">✓ Receipt processed (<%= split.receipt_items_count %> items found)</p>
         </div>
       <% else %>
         <div class="space-y-2 relative z-20 inline-block">
-          <%= button_to "Process Receipt", process_receipt_split_path(split), method: :post, class: "rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 dark:bg-blue-700 dark:hover:bg-blue-600 text-white cursor-pointer" %>
+          <%= button_to "Process Receipt", process_receipt_split_path(split), method: :post, class: "rounded-md px-3.5 py-2.5 bg-blue-700 hover:bg-blue-600 text-white cursor-pointer" %>
         </div>
       <% end %>
     <% else %>
-      <span class="text-gray-500 dark:text-gray-400">No receipt uploaded</span>
+      <span class="text-gray-400">No receipt uploaded</span>
     <% end %>
   </div>
 </div>

@@ -3,7 +3,7 @@ require "test_helper"
 class ReceiptItemsControllerTest < ActionDispatch::IntegrationTest
   setup do
     @split = splits(:one)
-    @receipt_item = receipt_items(:one)
+    @receipt_item = receipt_items(:mine)
     sign_in_as users(:one)
   end
 

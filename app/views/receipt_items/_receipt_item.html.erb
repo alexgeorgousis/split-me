@@ -1,6 +1,6 @@
 <div
   id="receipt_item_<%= receipt_item.id %>"
-  class="border rounded-md overflow-hidden transition-all hover:shadow-md <%= receipt_item.undecided? ? "border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800" : "border-blue-400 dark:border-blue-600 bg-blue-50 dark:bg-blue-900/20" %> relative">
+  class="border rounded-md overflow-hidden transition-all hover:shadow-md <%= receipt_item.undecided? ? "border-gray-600 bg-gray-800" : "border-blue-600 bg-blue-900/20" %> relative">
 
   <%= button_to split_receipt_item_path(receipt_item.receipt.split, receipt_item),
     method: :patch,
@@ -12,7 +12,7 @@
       <div class="flex items-start space-x-3">
         <div class="flex-1">
           <h3 class="font-medium text-lg select-text"><%= receipt_item.name %></h3>
-          <div class="text-sm text-gray-600 dark:text-gray-400 mt-1">
+          <div class="text-sm text-gray-400 mt-1">
             <span class="select-text">Price: £<%= sprintf("%.2f", receipt_item.price) %></span>
           </div>
         </div>
@@ -24,22 +24,22 @@
     <%= button_to toggle_favourite_split_receipt_item_path(receipt_item.receipt.split, receipt_item),
       method: :post,
       form_class: "inline-block",
-      class: "rounded-full border-2 border-pink-600 p-1 bg-white dark:bg-gray-800" do %>
-      <%= icon receipt_item.favourite? ? "heart_filled" : "heart_unfilled", css_class: "w-6 h-6 text-pink-600 hover:text-pink-500 dark:text-pink-700 dark:hover:text-pink-600 cursor-pointer" %>
+      class: "rounded-full border-2 border-pink-600 p-1 bg-gray-800" do %>
+      <%= icon receipt_item.favourite? ? "heart_filled" : "heart_unfilled", css_class: "w-6 h-6 text-pink-700 hover:text-pink-600 cursor-pointer" %>
     <% end %>
     <%= button_to split_receipt_item_path(receipt_item.receipt.split, receipt_item),
       method: :delete,
       form: { data: { turbo_confirm: "Are you sure you want to delete this item?" } },
       form_class: "inline-block",
-      class: "rounded-full border-2 border-red-600 p-1 bg-white dark:bg-gray-800" do %>
-      <%= icon "bin", css_class: "w-6 h-6 text-red-600 hover:text-red-500 dark:text-red-700 dark:hover:text-red-600 cursor-pointer" %>
+      class: "rounded-full border-2 border-red-600 p-1 bg-gray-800" do %>
+      <%= icon "bin", css_class: "w-6 h-6 text-red-700 hover:text-red-600 cursor-pointer" %>
     <% end %>
   </div>
 
-  <div class="border-t border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-4 py-3 <%= receipt_item.undecided? ? 'hidden' : 'block' %>">
+  <div class="border-t border-gray-700 bg-gray-800 px-4 py-3 <%= receipt_item.undecided? ? 'hidden' : 'block' %>">
     <div class="flex items-center justify-between mb-2">
       <span
-        class="text-xs text-gray-500 dark:text-gray-400">Your share: £<%= receipt_item.my_share %>
+        class="text-xs text-gray-400">Your share: £<%= receipt_item.my_share %>
     </span>
     </div>
 
@@ -48,15 +48,15 @@
       <%= button_to split_receipt_item_path(receipt_item.receipt.split, receipt_item),
         method: :patch,
         params: { split_mode: "mine" },
-        class: "rounded-full border-2 p-2 transition-all cursor-pointer #{receipt_item.mine? ? 'border-green-400 bg-green-50 dark:bg-green-900/20' : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 hover:border-green-600 hover:bg-green-50 dark:hover:bg-green-900/20'}" do %>
-        <%= icon "hand_raised", css_class: "w-6 h-6 #{receipt_item.mine? ? 'text-green-600 dark:text-green-400' : 'text-gray-600 dark:text-gray-400'}" %>
+        class: "rounded-full border-2 p-2 transition-all cursor-pointer #{receipt_item.mine? ? 'border-green-400 bg-green-900/20' : 'border-gray-600 bg-gray-800 hover:border-green-600 hover:bg-green-900/20'}" do %>
+        <%= icon "hand_raised", css_class: "w-6 h-6 #{receipt_item.mine? ? 'text-green-400' : 'text-gray-400'}" %>
       <% end %>
 
       <%= button_to split_receipt_item_path(receipt_item.receipt.split, receipt_item),
         method: :patch,
         params: { split_mode: "shared" },
-        class: "rounded-full border-2 p-2 transition-all cursor-pointer relative overflow-hidden #{receipt_item.shared? ? 'border-green-400' : 'border-gray-300 dark:border-gray-600 hover:border-yellow-600 hover:bg-yellow-50 dark:hover:bg-yellow-900/20'}" do %>
-        <%= icon "people", css_class: "w-6 h-6 relative z-10 #{receipt_item.shared? ? 'text-orange-600 dark:text-orange-400' : 'text-gray-600 dark:text-gray-400'}" %>
+        class: "rounded-full border-2 p-2 transition-all cursor-pointer relative overflow-hidden #{receipt_item.shared? ? 'border-green-400' : 'border-gray-600 hover:border-yellow-600 hover:bg-yellow-900/20'}" do %>
+        <%= icon "people", css_class: "w-6 h-6 relative z-10 #{receipt_item.shared? ? 'text-orange-400' : 'text-gray-400'}" %>
       <% end %>
 
     </div>
