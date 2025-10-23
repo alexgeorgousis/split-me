@@ -17,3 +17,9 @@ undecided:
   price: 30.0
   split_mode: undecided
   receipt: one
+
+two:
+  name: another item
+  price: 15.0
+  split_mode: mine
+  receipt: two

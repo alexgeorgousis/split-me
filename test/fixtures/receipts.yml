@@ -1,2 +1,5 @@
 one:
   split: one
+
+two:
+  split: two
