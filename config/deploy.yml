@@ -93,7 +93,13 @@ ssh:
   keys: [~/.ssh/kamal]
 
 # Use accessory services (secrets come from .kamal/secrets).
-# accessories:
+accessories:
+  uptime-kuma:
+    image: louislam/uptime-kuma:2
+    host: 192.168.0.177
+    port: 3001
+    volumes:
+      - uptime-kuma:/app/data
 #   db:
 #     image: mysql:8.0
 #     host: 192.168.0.2
