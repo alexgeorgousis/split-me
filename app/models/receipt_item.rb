@@ -1,6 +1,10 @@
 class ReceiptItem < ApplicationRecord
   belongs_to :receipt
 
+  after_create_commit do
+    mine! if favourite?
+  end
+
   enum :split_mode, [ :mine, :shared, :undecided ], default: :undecided
 
   def my_share

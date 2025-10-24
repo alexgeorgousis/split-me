@@ -35,8 +35,7 @@ class Receipt < ApplicationRecord
   private
     def create_receipt_items_using(receipt_item_hashes)
       receipt_item_hashes.each do |item_data|
-        item = receipt_items.create! name: item_data[:name], price: item_data[:price]
-        item.mine! if item.favourite?
+        receipt_items.create! name: item_data[:name], price: item_data[:price]
       end
     end
 end

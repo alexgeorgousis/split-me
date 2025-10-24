@@ -24,4 +24,9 @@ class ReceiptItemsControllerTest < ActionDispatch::IntegrationTest
     patch split_receipt_item_url(splits(:two), receipt_items(:two)), params: { split_mode: "mine" }
     assert_response :not_found
   end
+
+  test "marks receipt item as mine if it matches a favourite" do
+    item = ReceiptItem.create! receipt: receipts(:one), name: "one", price: 15
+    assert item.mine?
+  end
 end
