@@ -24,9 +24,9 @@ module Receipt::Genaiable
 
     def prompt(raw_receipt_text = nil)
       <<~PROMPT
-        Parse this receipt and extract only the grocery items as JSON.
+        Parse this receipt and extract only the line items as JSON.
 
-        For each grocery item, provide:
+        For each line item, provide:
         - name
         - price: Total price for this line item exactly as shown on receipt
 
@@ -45,6 +45,9 @@ module Receipt::Genaiable
     def to_json(raw_llm_response)
       cleaned = raw_llm_response.gsub(/^```json\s*/, "").gsub(/\s*```$/, "")
       JSON.parse(cleaned)
+    rescue JSON::ParserError => e
+      Rails.logger.error "Failed to parse LLM response as JSON: #{e.class} - #{e.message}"
+      raise e
     end
 
     def receipt_item_hash_from(receipt_item_json)

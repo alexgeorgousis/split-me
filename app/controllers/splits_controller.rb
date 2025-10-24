@@ -39,14 +39,11 @@ class SplitsController < ApplicationController
   end
 
   def process_receipt
-    if @split.receipt&.file&.attached?
-      @split.process_receipt!
+    if @split.process_receipt
       redirect_to split_path(@split)
     else
-      redirect_to splits_path, alert: "No receipt file attached."
+      redirect_to splits_path, alert: "We couldn't process your receipt :("
     end
-  rescue => e
-    redirect_to splits_path, alert: "Failed to process receipt: #{e.message}"
   end
 
   private

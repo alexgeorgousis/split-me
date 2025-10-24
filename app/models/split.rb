@@ -10,8 +10,9 @@ class Split < ApplicationRecord
     user.splits
   end
 
-  def process_receipt!
-    receipt.process!
+  def process_receipt
+    return false unless receipt.attached?
+    receipt.process rescue false
   end
 
   def total
