@@ -22,6 +22,7 @@ gem "jbuilder"
 gem "pdf-reader"
 # LLM interface for AI API calls [https://github.com/crmne/ruby_llm]
 gem "ruby_llm"
+gem "ruby_llm-schema"
 
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
 gem "bcrypt", "~> 3.1.7"
