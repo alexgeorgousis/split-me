@@ -9,7 +9,7 @@ class Receipt < ApplicationRecord
   delegate :attached?, :filename, :blob, to: :file, allow_nil: true
 
   def process
-    create_receipt_items_using llm_magic
+    create_receipt_items_using_llm_magic
   end
 
   def processed?
@@ -31,11 +31,4 @@ class Receipt < ApplicationRecord
   def receipt_items_count
     receipt_items.count
   end
-
-  private
-    def create_receipt_items_using(receipt_item_hashes)
-      receipt_item_hashes.each do |item_data|
-        receipt_items.create! name: item_data[:name], price: item_data[:price]
-      end
-    end
 end

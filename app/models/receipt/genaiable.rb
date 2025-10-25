@@ -1,30 +1,36 @@
 module Receipt::Genaiable
   extend ActiveSupport::Concern
 
-  def llm_magic
-    if file.content_type == "application/pdf"
-      response = ask_llm parse_attached_file
-    else
-      response = ask_llm
-    end
-
-    receipt_items_json = to_json response.content
-    receipt_items_json.map(&method(:receipt_item_hash_from))
+  def create_receipt_items_using_llm_magic
+    receipt_items.create! llm_magic["items"]
+  rescue StandardError => e
+    Rails.logger.error "LLM failed to parse receipt: #{e.message}"
+    raise "Failed to parse receipt using LLM."
   end
 
   private
+    def llm_magic
+      if file.content_type == "application/pdf"
+        ask_llm(parse_attached_file).content
+      else
+        ask_llm.content
+      end
+    end
+
     def ask_llm(raw_receipt_text = nil)
-      chat = RubyLLM.chat(model: "claude-sonnet-4")
+      chat = RubyLLM.chat(model: "gpt-5-nano")
+      chat.with_schema(ReceiptItemsSchema)
+
       if raw_receipt_text.present?
         chat.ask(prompt raw_receipt_text)
       else
-        chat.ask prompt, with: file
+        chat.ask(prompt, with: file)
       end
     end
 
     def prompt(raw_receipt_text = nil)
       <<~PROMPT
-        Parse this receipt and extract only the line items as JSON.
+        Parse this receipt and extract only the line items.
 
         For each line item, provide:
         - name
@@ -33,24 +39,8 @@ module Receipt::Genaiable
         Rules:
         - Skip headers, footers, store info, payment details, and promotional text
         - For Sainsbury's receipts, ignore Substitutions and Shorter life sections
-        - Clean product names by removing store branding
-
-        Return only a valid JSON array with no other text:
-        [{"name": "Product Name", "price": 5.50}]
 
         #{raw_receipt_text if raw_receipt_text.present?}
       PROMPT
-    end
-
-    def to_json(raw_llm_response)
-      cleaned = raw_llm_response.gsub(/^```json\s*/, "").gsub(/\s*```$/, "")
-      JSON.parse(cleaned)
-    rescue JSON::ParserError => e
-      Rails.logger.error "Failed to parse LLM response as JSON: #{e.class} - #{e.message}"
-      raise e
-    end
-
-    def receipt_item_hash_from(receipt_item_json)
-      { name: receipt_item_json["name"], price: receipt_item_json["price"].to_f }
     end
 end
