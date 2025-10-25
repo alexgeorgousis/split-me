@@ -11,7 +11,7 @@ class Split < ApplicationRecord
 
   def process_receipt
     return false unless receipt.attached?
-    receipt.process rescue false
+    receipt.process_later rescue false
   end
 
   def total

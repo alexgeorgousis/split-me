@@ -8,12 +8,14 @@ class Receipt < ApplicationRecord
 
   delegate :attached?, :filename, :blob, to: :file, allow_nil: true
 
-  def process
-    create_receipt_items_using_llm_magic
+  enum :status, [ :pending, :processing, :processed, :failed ], default: :pending
+
+  def process_later
+    Receipt::ProcessJob.perform_later self
   end
 
-  def processed?
-    receipt_items.any?
+  def process_now
+    create_receipt_items_using_llm_magic
   end
 
   def total

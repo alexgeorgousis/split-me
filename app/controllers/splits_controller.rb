@@ -2,7 +2,7 @@ class SplitsController < ApplicationController
   before_action :set_split, only: %i[ show edit update destroy process_receipt ]
 
   def index
-    @splits = Split.owned_by_user
+    @splits = Split.owned_by_user.order(created_at: :desc)
   end
 
   def show
@@ -39,9 +39,7 @@ class SplitsController < ApplicationController
   end
 
   def process_receipt
-    if @split.process_receipt
-      redirect_to split_path(@split)
-    else
+    unless @split.process_receipt
       redirect_to splits_path, alert: "We couldn't process your receipt :("
     end
   end

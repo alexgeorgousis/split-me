@@ -66,18 +66,22 @@ class SplitsControllerTest < ActionDispatch::IntegrationTest
   test "should process receipt successfully" do
     split = Split.create!(user: users(:one), receipt_attributes: { file: fixture_file_upload("test_receipt.pdf", "application/pdf") })
 
-    response_json = "[{\"name\": \"Test Item\", \"price\": 1.50}, {\"name\": \"Another Item\", \"price\": 2.50}]"
-    mock_response = Struct.new(:content).new(response_json)
+    mock_response = Struct.new(:content).new({
+      "items" => [
+        { "name" => "Test Item", "price" => 1.50 },
+        { "name" => "Another Item", "price" => 2.50 }
+      ]
+    })
 
     Receipt.prepend(Module.new do
-      define_method(:ask_llm) { |raw_receipt_text = nil| mock_response }
+      define_method(:ask_llm) { |_raw_receipt_text = nil| mock_response }
     end)
 
-    post process_receipt_split_url(split)
+    assert_performed_jobs 1 do
+      post process_receipt_split_url(split)
+    end
 
-    assert_redirected_to split_url(split)
-
-    split.reload
+    split.receipt.reload
     assert split.receipt.processed?
     assert_equal 2, split.receipt.receipt_items.count
   end

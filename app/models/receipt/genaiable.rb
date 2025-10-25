@@ -11,10 +11,16 @@ module Receipt::Genaiable
   private
     def llm_magic
       if file.content_type == "application/pdf"
-        ask_llm(parse_attached_file).content
+        response = ask_llm(parse_attached_file).content
       else
-        ask_llm.content
+        response = ask_llm.content
       end
+
+      if response["items"].blank?
+        raise "LLM did not return any receipt items."
+      end
+
+      response
     end
 
     def ask_llm(raw_receipt_text = nil)

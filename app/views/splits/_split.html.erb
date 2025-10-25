@@ -1,26 +1,46 @@
-<div id="<%= dom_id split %>" class="w-full border border-gray-700 rounded-lg p-6 space-y-4 bg-gray-800 hover:shadow-md hover:shadow-gray-900/50 transition-shadow">
-  <div>
-    <% if split.receipt && split.receipt.processed? %>
-      <strong class="font-large">Total:</strong>
-      <span>£<%= split.total %></span>
-    <% else %>
-      <span class="text-gray-400">Process receipt to begin splitting!</span>
+<div id="<%= dom_id split %>" class="w-full border rounded-lg px-8 md:px-6 pt-4 pb-8 md:pb-6 transition-all text-xl md:text-base <%= split.receipt&.processed? ? 'bg-gray-800 border-gray-700 group-hover:border-blue-500 group-hover:shadow-lg group-hover:shadow-blue-500/20' : 'bg-gray-800/40 border-gray-700/40' %>">
+  <div class="absolute top-4 right-4 z-20 flex space-x-2">
+    <% if split.receipt&.failed? %>
+      <%= link_to process_receipt_split_path(split), data: { turbo_method: :post }, class: "cursor-pointer bg-transparent rounded-full border-0 border-2 border-violet-600 p-1" do %>
+        <%= icon "retry", css_class: "w-6 h-6 text-violet-700 hover:text-violet-600" %>
+      <% end %>
+    <% end %>
+    <%= button_to split,
+      method: :delete,
+      class: "cursor-pointer bg-transparent rounded-full border-0 border-2 border-red-600 p-1",
+      data: { turbo_confirm: "Are you sure?" } do %>
+      <%= icon "bin", css_class: "w-6 h-6 text-red-700 hover:text-red-600" %>
     <% end %>
   </div>
 
-  <div>
-    <% if split.receipt %>
-      <% if split.receipt.processed? %>
-        <div class="space-y-2">
-          <p class="text-green-400">✓ Receipt processed (<%= split.receipt_items_count %> items found)</p>
-        </div>
-      <% else %>
-        <div class="space-y-2 relative z-20 inline-block">
-          <%= button_to "Process Receipt", process_receipt_split_path(split), method: :post, class: "rounded-md px-3.5 py-2.5 bg-blue-700 hover:bg-blue-600 text-white cursor-pointer" %>
-        </div>
-      <% end %>
-    <% else %>
-      <span class="text-gray-400">No receipt uploaded</span>
-    <% end %>
-  </div>
+  <% if split.receipt %>
+    <div class="space-y-12 md:space-y-6">
+      <div class="mt-1">
+        <strong class="font-large">Total:</strong>
+        <span>£<%= split.total %></span>
+      </div>
+      <div>
+        <% case split.receipt.status.to_sym %>
+        <% when :pending %>
+          <%= button_to process_receipt_split_path(split), method: :post, class: "relative z-20 text-blue-400 hover:text-blue-300 cursor-pointer bg-transparent border-1 rounded-md p-2 p-0 flex items-center" do %>
+            <%= icon "arrow_right_circle", css_class: "w-6 h-6 mr-1" %> <span>Process receipt</span>
+          <% end %>
+        <% when :processing %>
+          <p class="text-violet-400 flex items-center">
+            <span class="inline-block animate-spin mr-1"><%= icon "retry", css_class: "w-6 h-6" %></span> Processing receipt...
+          </p>
+        <% when :processed %>
+          <p class="text-green-400 flex items-center">
+            <%= icon "check_circle", css_class: "w-6 h-6 mr-1" %> Receipt processed
+          </p>
+        <% when :failed %>
+          <p class="text-red-400 flex items-center">
+            <%= icon "x_circle", css_class: "w-6 h-6 mr-1" %> Receipt processing failed
+          </p>
+        <% end %>
+      </div>
+    </div>
+  <% else %>
+    <span class="text-gray-400">No receipt uploaded</span>
+  <% end %>
 </div>

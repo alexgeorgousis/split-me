@@ -26,22 +26,15 @@
   </div>
 
   <div id="splits" class="space-y-4 mt-6">
+    <%= turbo_stream_from "splits" %>
     <% if @splits.any? %>
       <% @splits.each do |split| %>
-        <div class="relative">
-          <%= link_to split_path(split), class: "absolute inset-0 z-10" do %>
+        <div class="relative group">
+          <% if split.receipt&.processed? %>
+            <%= link_to split_path(split), class: "absolute inset-0 z-10" do %>
+            <% end %>
           <% end %>
           <%= render split %>
-          <div class="absolute top-4 right-4 z-20 flex space-x-2">
-            <% if split.receipt && split.receipt.attached? %>
-              <%= link_to split.receipt.file, target: "_blank", class: "rounded-md px-2 py-1.5 text-white bg-blue-700 hover:bg-blue-600 font-medium cursor-pointer text-sm" do %>
-                <%= icon "document", css_class: "w-4 h-4" %>
-              <% end %>
-            <% end %>
-            <%= button_to split, method: :delete, class: "rounded-md px-2 py-1.5 text-white bg-red-700 hover:bg-red-600 font-medium cursor-pointer text-sm", data: { turbo_confirm: "Are you sure?" } do %>
-              <%= icon "bin", css_class: "w-4 h-4" %>
-            <% end %>
-          </div>
         </div>
       <% end %>
     <% else %>

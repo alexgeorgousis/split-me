@@ -20,6 +20,6 @@ class ReceiptItem < ApplicationRecord
   end
 
   def favourite?
-    Favourite.owned_by_user.exists? name: name
+    receipt.split.user.favourites.exists? name: name
   end
 end

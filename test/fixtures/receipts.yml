@@ -1,5 +1,7 @@
 one:
   split: one
+  status: pending
 
 two:
   split: two
+  status: pending
