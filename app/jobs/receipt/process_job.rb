@@ -5,21 +5,15 @@ class Receipt::ProcessJob < ApplicationJob
     return unless receipt.pending? || receipt.failed?
 
     receipt.processing!
-    broadcast_split(receipt)
+    receipt.split.broadcast_update_split_card_content
 
     receipt.process_now
     receipt.processed!
-    broadcast_split(receipt)
+    receipt.split.broadcast_update_split_card_content
 
   rescue => e
     Rails.logger.error "Receipt processing failed: #{e.class} - #{e.message}"
     receipt.failed!
-    broadcast_split(receipt)
-  end
-
-  private
-
-  def broadcast_split(receipt)
-    receipt.split.broadcast_replace_to :splits
+    receipt.split.broadcast_update_split_card_content
   end
 end
