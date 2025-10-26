@@ -1,6 +1,6 @@
 <div
   id="receipt_item_<%= receipt_item.id %>"
-  class="border rounded-md overflow-hidden transition-all hover:shadow-md <%= receipt_item.undecided? ? "border-gray-600 bg-gray-800" : "border-blue-600 bg-blue-900/20" %> relative">
+  class="border rounded-md overflow-hidden transition-all <%= receipt_item.undecided? ? "border-gray-600 bg-gray-800 hover:border-blue-500 hover:shadow-lg hover:shadow-blue-500/20" : "border-blue-500 bg-blue-900/20" %> relative">
 
   <%= button_to split_receipt_item_path(receipt_item.receipt.split, receipt_item),
     method: :patch,
