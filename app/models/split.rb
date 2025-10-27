@@ -27,8 +27,8 @@ class Split < ApplicationRecord
   end
 
   def broadcast_update_split_card_content
-    broadcast_replace_to :splits,
-      target: ActionView::RecordIdentifier.dom_id(self, :card_content),
+    broadcast_replace_to self,
+      target: [ self, :card_content ],
       partial: "splits/card_content",
       locals: { split: self }
   end

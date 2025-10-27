@@ -25,15 +25,10 @@
     <% end %>
   </div>
 
-  <div id="splits" class="space-y-4 mt-6">
-    <%= turbo_stream_from "splits" %>
+  <div id="splits" class="space-y-4 my-6">
     <% if @splits.any? %>
       <% @splits.each do |split| %>
         <div class="relative group">
-          <% if split.receipt&.processed? %>
-            <%= link_to split_path(split), class: "absolute inset-0 z-10" do %>
-            <% end %>
-          <% end %>
           <%= render split %>
         </div>
       <% end %>

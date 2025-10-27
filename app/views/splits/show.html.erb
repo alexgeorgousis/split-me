@@ -25,7 +25,7 @@
 
   <%= render "summary", split: @split %>
 
-  <div class="space-y-6" data-controller="update-summary" data-update-summary-receipt-items-value="<%= @split.receipt.receipt_items.to_json %>">
+  <div class="space-y-6 mb-6" data-controller="update-summary" data-update-summary-receipt-items-value="<%= @split.receipt.receipt_items.to_json %>">
     <% @split.receipt.receipt_items.each do |receipt_item| %>
       <%= render receipt_item %>
     <% end %>

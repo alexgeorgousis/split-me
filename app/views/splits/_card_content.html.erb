@@ -1,4 +1,8 @@
 <div id="<%= dom_id split, :card_content %>" class="flex-1 px-3 py-4 flex flex-col justify-between <%= split.receipt&.processed? ? 'bg-gray-800 group-hover:border-blue-500 group-hover:shadow-lg group-hover:shadow-blue-500/20' : 'bg-gray-800/40' %>">
+  <% if split.receipt&.processed? %>
+    <%= link_to split_path(split), class: "absolute inset-0 z-10" do %>
+    <% end %>
+  <% end %>
   <div>
     <strong class="font-large">Total:</strong>
     <span>£<%= split.total %></span>
