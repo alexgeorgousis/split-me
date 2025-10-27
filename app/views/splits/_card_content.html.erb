@@ -8,11 +8,7 @@
     <span>£<%= split.total %></span>
   </div>
   <div class="flex justify-end items-end">
-    <% if split.receipt.pending? %>
-      <%= button_to process_receipt_split_path(split), method: :post, class: "relative z-20 cursor-pointer" do %>
-        <%= icon "arrow_right_circle", css_class: "w-11 h-11 text-blue-400 hover:text-blue-300" %>
-      <% end %>
-    <% elsif split.receipt.processing? %>
+    <% if split.receipt.processing? %>
       <span class="inline-block animate-spin"><%= icon "retry", css_class: "w-11 h-11 text-violet-400" %></span>
     <% elsif split.receipt.failed? %>
       <%= link_to process_receipt_split_path(split), data: { turbo_method: :post }, class: "relative z-20 cursor-pointer group/retry" do %>

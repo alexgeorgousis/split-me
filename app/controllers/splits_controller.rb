@@ -1,5 +1,5 @@
 class SplitsController < ApplicationController
-  before_action :set_split, only: %i[ show edit update destroy process_receipt ]
+  before_action :set_split, only: %i[ show destroy process_receipt ]
 
   def index
     @splits = Split.owned_by_user.order(created_at: :desc)
@@ -8,28 +8,14 @@ class SplitsController < ApplicationController
   def show
   end
 
-  def new
-    @split = Split.new
-  end
-
-  def edit
-  end
-
   def create
     @split = Split.owned_by_user.build split_params
 
     if @split.save
+      process_receipt if @split.receipt&.attached?
       redirect_to splits_path
     else
       render :new, status: :unprocessable_entity
-    end
-  end
-
-  def update
-    if @split.update(split_params)
-      redirect_to splits_path, status: :see_other
-    else
-      render :edit, status: :unprocessable_entity
     end
   end
 
@@ -39,9 +25,7 @@ class SplitsController < ApplicationController
   end
 
   def process_receipt
-    unless @split.process_receipt
-      redirect_to splits_path, alert: "We couldn't process your receipt :("
-    end
+    @split.receipt.process_later
   end
 
   private
@@ -50,6 +34,6 @@ class SplitsController < ApplicationController
     end
 
     def split_params
-      params.require(:split).permit(receipt_attributes: [ :file ])
+      params.fetch(:split, {}).permit(receipt_attributes: [ :file ])
     end
 end
