@@ -23,6 +23,15 @@
   </head>
 
   <body class="bg-gray-900 text-gray-100">
+    <% if Current.user&.demo? %>
+      <% minutes_remaining = ((Current.session.created_at + 1.hour - Time.current) / 60).to_i %>
+      <div class="bg-yellow-600 text-black text-center py-2 px-12 font-medium relative" data-controller="dismissable">
+        <div>This is a demo. Your Splits will be lost when your session expires. Make the most of it!</div>
+        <div class="text-sm"><%= minutes_remaining %> minutes remaining</div>
+        <button data-action="click->dismissable#hide" class="absolute right-2 top-1/2 -translate-y-1/2 text-2xl leading-none hover:opacity-70 w-8 h-8 rounded-full border-2 border-black flex items-center justify-center cursor-pointer">&times;</button>
+      </div>
+    <% end %>
+
     <header>
       <% if Current.user %>
         <nav class="flex justify-end p-4 border-b border-gray-800">

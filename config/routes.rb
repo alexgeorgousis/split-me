@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get "demo", to: "demos#create"
+
   resource :session
   resources :passwords, param: :token
   resources :users, only: [ :new, :create ]
