@@ -1,0 +1,11 @@
+<% content_for :title, "Split Me" %>
+
+<div class="w-full max-w-4xl mx-auto text-center">
+  <h1 class="text-5xl font-bold mb-6">Split Me</h1>
+  <p class="text-xl text-gray-400 mb-8">Bill splitting made easy</p>
+
+  <div class="flex gap-4 justify-center">
+    <%= link_to "Create account", new_user_path, class: "px-6 py-3 bg-green-700 hover:bg-green-600 rounded-lg text-lg font-medium transition" %>
+    <%= link_to "Sign In", new_session_path, class: "px-6 py-3 bg-gray-800 hover:bg-gray-700 rounded-lg text-lg font-medium transition" %>
+  </div>
+</div>

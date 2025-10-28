@@ -24,13 +24,13 @@
 
   <body class="bg-gray-900 text-gray-100">
     <header>
-      <nav class="flex justify-end p-4">
-        <% if Current.user %>
+      <% if Current.user %>
+        <nav class="flex justify-end p-4 border-b border-gray-800">
           <%= button_to session_path, method: :delete, class: "p-2 hover:bg-gray-800 rounded-full transition cursor-pointer" do %>
             <%= icon "logout", css_class: "w-6 h-6 text-gray-300" %>
           <% end %>
-        <% end %>
-      </nav>
+        </nav>
+      <% end %>
     </header>
 
     <main class="container mx-auto mt-14 px-3 flex">
