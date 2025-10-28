@@ -34,7 +34,11 @@
 
     <header>
       <% if Current.user %>
-        <nav class="flex justify-end p-4 border-b border-gray-800">
+        <nav class="flex justify-end items-center gap-2 p-4 border-b border-gray-800">
+          <%= link_to favourites_path, class: "p-2 hover:bg-gray-800 rounded-full transition cursor-pointer" do %>
+            <%= icon controller_name == "favourites" ? "heart_filled" : "heart_unfilled", css_class: "w-6 h-6 text-gray-300" %>
+          <% end %>
+          <div class="h-6 w-px bg-gray-700"></div>
           <%= button_to session_path, method: :delete, class: "p-2 hover:bg-gray-800 rounded-full transition cursor-pointer" do %>
             <%= icon "logout", css_class: "w-6 h-6 text-gray-300" %>
           <% end %>

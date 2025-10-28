@@ -1,14 +1,57 @@
 <% content_for :title, "Split Me" %>
 
 <div class="w-full max-w-4xl mx-auto text-center">
-  <h1 class="text-5xl font-bold mb-6">Split Me</h1>
-  <p class="text-xl text-gray-400 mb-8">Bill splitting made easy</p>
+  <div class="min-h-[60vh] flex flex-col justify-center py-16">
+    <h1 class="text-5xl md:text-6xl font-bold mb-6">Split Me</h1>
+    <p class="text-xl md:text-2xl text-gray-400 mb-12">Bill splitting made easy</p>
 
-  <div class="flex flex-col gap-4 items-center">
-    <div class="flex gap-4">
-      <%= link_to "Create account", new_user_path, class: "px-6 py-3 bg-green-700 hover:bg-green-600 rounded-lg text-lg font-medium" %>
-      <%= link_to "Sign In", new_session_path, class: "px-6 py-3 bg-gray-800 hover:bg-gray-700 rounded-lg text-lg font-medium" %>
-      <%= link_to "Demo", demo_path, class: "px-6 py-3 bg-blue-700 hover:bg-blue-600 rounded-lg text-lg font-medium" %>
+    <div class="flex flex-col gap-6 items-center">
+      <div class="flex gap-4">
+        <%= link_to "Join now", new_user_path, class: "px-6 py-3 bg-green-700 hover:bg-green-600 rounded-lg text-lg font-medium" %>
+        <%= link_to "Sign in", new_session_path, class: "px-6 py-3 bg-gray-800 hover:bg-gray-700 rounded-lg text-lg font-medium" %>
+      </div>
+
+      <div class="flex items-center gap-4 w-full max-w-xs">
+        <div class="flex-1 border-t border-gray-700"></div>
+        <span class="text-gray-500 text-sm">or</span>
+        <div class="flex-1 border-t border-gray-700"></div>
+      </div>
+
+      <%= link_to "Try it out!", demo_path, class: "px-6 py-3 bg-blue-700 hover:bg-blue-600 rounded-lg text-lg font-medium" %>
+    </div>
+  </div>
+
+  <div class="my-16 space-y-16 text-left">
+    <h2 class="text-3xl font-bold text-center mb-12">How it works</h2>
+
+    <div class="grid md:grid-cols-2 gap-8 items-center">
+      <div>
+        <h3 class="text-2xl font-semibold mb-4">1. Create a split</h3>
+        <p class="text-gray-400">Upload a picture or PDF of your receipt to create a new Split. We'll automatically process it and extract all the items.</p>
+      </div>
+      <div class="rounded-lg overflow-hidden border border-gray-800 md:order-1">
+        <%= image_tag "splits_index.jpeg", alt: "Item selection page", class: "w-full h-auto" %>
+      </div>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-8 items-center">
+      <div class="md:order-2">
+        <h3 class="text-2xl font-semibold mb-4">2. Select your items</h3>
+        <p class="text-gray-400">Go through the list and select the items you ordered. You can mark them as yours or shared. We'll calculate your share and theirs automatically.</p>
+      </div>
+      <div class="rounded-lg overflow-hidden md:order-1">
+        <%= image_tag "split_breakdown.jpeg", alt: "Item selection page", class: "w-full h-auto" %>
+      </div>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-8 items-center">
+      <div>
+        <h3 class="text-2xl font-semibold mb-4">3. Remember your favourites</h3>
+        <p class="text-gray-400">Have things you order frequently? Mark them as favourite (little heart icon) and they'll be automatically selected the next time they're spotted on a receipt!</p>
+      </div>
+      <div class="rounded-lg overflow-hidden border border-gray-800 md:order-1">
+        <%= image_tag "favourites_index.jpeg", alt: "Item selection page", class: "w-full h-auto" %>
+      </div>
     </div>
   </div>
 </div>

@@ -1,6 +1,15 @@
 <% content_for :title, "Favourites" %>
 
 <div class="w-full max-w-3xl mx-auto">
+  <div class="w-full sticky top-0 bg-gray-900 pt-4 pb-4 z-30">
+    <div class="flex items-center gap-3">
+      <%= link_to splits_path, class: "p-2 hover:bg-gray-700 rounded-md transition-colors" do %>
+        <%= icon "arrow_left", css_class: "w-6 h-6 text-gray-300" %>
+      <% end %>
+      <h1 class="font-bold text-2xl sm:text-4xl">Favourites</h1>
+    </div>
+  </div>
+
   <div class="w-full flex justify-center">
     <%= link_to new_favourite_path, class: "p-2 rounded-full bg-green-700 hover:bg-green-600 transition cursor-pointer" do %>
       <%= icon "plus", css_class: "w-6 h-6 text-white" %>
@@ -12,12 +21,9 @@
       <% @favourites.each do |favourite| %>
         <div class="relative">
           <%= render favourite %>
-          <div class="absolute top-1/2 -translate-y-1/2 right-4 z-20 flex space-x-2">
-            <%= link_to edit_favourite_path(favourite), class: "rounded-md px-2 py-1.5 text-white bg-blue-700 hover:bg-blue-600 font-medium cursor-pointer text-sm" do %>
-              <%= icon "pencil", css_class: "w-4 h-4" %>
-            <% end %>
-            <%= button_to favourite, method: :delete, class: "rounded-md px-2 py-1.5 text-white bg-red-700 hover:bg-red-600 font-medium cursor-pointer text-sm", data: { turbo_confirm: "Are you sure?" } do %>
-              <%= icon "bin", css_class: "w-4 h-4" %>
+          <div class="absolute top-4 right-4 z-20 flex space-x-2">
+            <%= button_to favourite, method: :delete, form: { data: { turbo_confirm: "Remove #{favourite.name} from your favourites?" } }, form_class: "inline-block", class: "rounded-full border-2 border-pink-600 p-1 bg-gray-800" do %>
+              <%= icon "heart_filled", css_class: "w-6 h-6 text-pink-700 hover:text-pink-600 cursor-pointer" %>
             <% end %>
           </div>
         </div>
