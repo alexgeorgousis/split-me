@@ -4,7 +4,12 @@ class Receipt < ApplicationRecord
 
   belongs_to :split
   has_many :receipt_items, dependent: :destroy
+
   has_one_attached :file
+  validates :file,
+    attached: true,
+    content_type: [ "image/png", "image/jpeg", "image/webp", "application/pdf", "text/plain" ],
+    size: { less_than: 20.megabytes }
 
   delegate :attached?, :filename, :blob, to: :file, allow_nil: true
 

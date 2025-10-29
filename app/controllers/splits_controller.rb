@@ -2,7 +2,7 @@ class SplitsController < ApplicationController
   before_action :set_split, only: %i[ show destroy process_receipt ]
 
   def index
-    @splits = Split.owned_by_user.order(created_at: :desc)
+    @splits = Split.owned_by_user.order created_at: :desc
   end
 
   def show
@@ -15,7 +15,7 @@ class SplitsController < ApplicationController
       process_receipt if @split.receipt&.attached?
       redirect_to splits_path
     else
-      render :new, status: :unprocessable_entity
+      redirect_to splits_path, alert: @split.errors.full_messages.to_sentence
     end
   end
 
