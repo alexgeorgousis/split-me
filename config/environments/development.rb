@@ -31,6 +31,13 @@ Rails.application.configure do
   # Change to :null_store to avoid any caching.
   config.cache_store = :memory_store
 
+  # Use Solid Queue with separate database
+  config.active_job.queue_adapter = :solid_queue
+  config.solid_queue.connects_to = { database: { writing: :queue } }
+
+  # Run Solid Queue worker in Puma process for development
+  ENV["SOLID_QUEUE_IN_PUMA"] = "true"
+
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = :local
   config.active_storage.variant_processor = :vips
