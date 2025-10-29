@@ -1,5 +1,5 @@
 class User < ApplicationRecord
-  include EmailVerification
+  include EmailVerification, Demoable
 
   has_secure_password
 

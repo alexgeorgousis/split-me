@@ -17,7 +17,14 @@
         <div class="flex-1 border-t border-gray-700"></div>
       </div>
 
-      <%= link_to "Try it out!", demo_path, data: { turbo: false }, class: "px-6 py-3 bg-blue-700 hover:bg-blue-600 rounded-lg text-lg font-medium" %>
+      <% if @demo_user %>
+        <%= link_to demo_path, data: { turbo: false }, class: "px-6 py-3 bg-blue-700 hover:bg-blue-600 rounded-lg text-lg font-medium" do %>
+          <span>Continue your demo</span>
+          <span class="text-sm text-blue-200"><%= @demo_user.minutes_remaining %> min left</span>
+        <% end %>
+      <% else %>
+        <%= link_to "Try it out!", demo_path, data: { turbo: false }, class: "px-6 py-3 bg-blue-700 hover:bg-blue-600 rounded-lg text-lg font-medium" %>
+      <% end %>
     </div>
   </div>
 
