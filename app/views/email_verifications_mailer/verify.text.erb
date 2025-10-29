@@ -1,0 +1,8 @@
+Verify your email
+==================
+
+Thanks for signing up for Split Me! Please verify your email address by clicking the link below:
+
+<%= email_verification_url(@user.email_verification_token) %>
+
+This link will expire in 24 hours. If you didn't create an account with Split Me, you can safely ignore this email.

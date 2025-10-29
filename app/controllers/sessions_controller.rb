@@ -7,6 +7,13 @@ class SessionsController < ApplicationController
 
   def create
     if user = User.authenticate_by(params.permit(:email_address, :password))
+      unless user.verified? || user.demo?
+        session[:pending_verification_user_id] = user.id
+        flash[:alert] = "Please verify your email address before logging in."
+        flash[:show_resend_link] = true
+        redirect_to new_session_path
+        return
+      end
       start_new_session_for user
       redirect_to after_authentication_url
     else
