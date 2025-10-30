@@ -27,7 +27,7 @@ class EmailVerificationsController < ApplicationController
     end
 
     def set_user_from_session
-      @user = User.find_by(id: session[:pending_verification_user_id])
+      @user = User.find_by(id: session.delete(:pending_verification_user_id))
       redirect_to new_session_path, alert: "Session expired. Please log in." unless @user
     end
 end
