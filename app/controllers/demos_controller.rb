@@ -9,11 +9,11 @@ class DemosController < ApplicationController
 
   private
     def find_or_create_demo_user
-      if existing_user = find_demo_user
-        return existing_user
+      if user = find_demo_user
+        user
+      else
+        create_demo_user
       end
-
-      create_demo_user
     end
 
     def find_demo_user
@@ -26,13 +26,7 @@ class DemosController < ApplicationController
       email = "demo_#{SecureRandom.hex(8)}@example.com"
       password = SecureRandom.hex(16)
 
-      user = User.create!(
-        email_address: email,
-        password: password,
-        password_confirmation: password,
-        demo: true
-      )
-
+      user = User.create!(email_address: email, password: password, demo: true)
       session[:demo_user_id] = user.id
       user
     end
