@@ -5,7 +5,7 @@
   <% end %>
   <div>
     <strong class="font-large">Total:</strong>
-    <span>£<%= split.total %></span>
+    <span>£<%= "%.2f" % split.total %></span>
   </div>
   <div class="flex justify-end items-end">
     <% if split.receipt.processing? %>

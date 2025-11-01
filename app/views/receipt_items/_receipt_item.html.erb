@@ -39,7 +39,7 @@
   <div class="border-t border-gray-700 bg-gray-800 px-4 py-3 <%= receipt_item.undecided? ? 'hidden' : 'block' %>">
     <div class="flex items-center justify-between mb-2">
       <span
-        class="text-xs text-gray-400">Your share: £<%= receipt_item.my_share %>
+        class="text-xs text-gray-400">Your share: £<%= "%.2f" % receipt_item.my_share %>
     </span>
     </div>
 
