@@ -1,6 +1,7 @@
 class Split < ApplicationRecord
   belongs_to :user
   has_one :receipt, dependent: :destroy
+  has_many :receipt_items, through: :receipt
   accepts_nested_attributes_for :receipt, allow_destroy: true
 
   delegate :receipt_items_count, to: :receipt, allow_nil: true

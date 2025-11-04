@@ -1,11 +1,17 @@
 class ReceiptItem < ApplicationRecord
   belongs_to :receipt
 
+  delegate :split, to: :receipt
+
   after_create_commit do
     mine! if favourite?
   end
 
   enum :split_mode, [ :mine, :shared, :undecided ], default: :undecided
+
+  def favourite?
+    receipt.split.user.favourites.exists? name: name
+  end
 
   def my_share
     case
@@ -17,9 +23,5 @@ class ReceiptItem < ApplicationRecord
 
   def their_share
     (price - my_share).round(2)
-  end
-
-  def favourite?
-    receipt.split.user.favourites.exists? name: name
   end
 end

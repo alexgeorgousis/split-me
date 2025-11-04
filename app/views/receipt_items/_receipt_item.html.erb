@@ -2,7 +2,7 @@
   id="receipt_item_<%= receipt_item.id %>"
   class="border rounded-md overflow-hidden transition-all <%= receipt_item.undecided? ? "border-gray-600 bg-gray-800 hover:border-blue-500 hover:shadow-lg hover:shadow-blue-500/20" : "border-blue-500 bg-blue-900/20" %> relative">
 
-  <%= button_to split_receipt_item_path(receipt_item.receipt.split, receipt_item),
+  <%= button_to split_receipt_item_path(receipt_item.split, receipt_item),
     method: :patch,
     params: { split_mode: receipt_item.undecided? ? 'mine' : 'undecided' },
     form_class: "w-full",
@@ -21,13 +21,13 @@
   <% end %>
 
   <div class="absolute top-4 right-4 z-20 flex space-x-2">
-    <%= button_to toggle_favourite_split_receipt_item_path(receipt_item.receipt.split, receipt_item),
+    <%= button_to toggle_favourite_split_receipt_item_path(receipt_item.split, receipt_item),
       method: :post,
       form_class: "inline-block",
       class: "rounded-full border-2 border-pink-600 p-1 bg-gray-800" do %>
       <%= icon receipt_item.favourite? ? "heart_filled" : "heart_unfilled", css_class: "w-6 h-6 text-pink-700 hover:text-pink-600 cursor-pointer" %>
     <% end %>
-    <%= button_to split_receipt_item_path(receipt_item.receipt.split, receipt_item),
+    <%= button_to split_receipt_item_path(receipt_item.split, receipt_item),
       method: :delete,
       form: { data: { turbo_confirm: "Are you sure you want to delete this item?" } },
       form_class: "inline-block",
@@ -45,14 +45,14 @@
 
     <div class="flex flex-row justify-evenly">
 
-      <%= button_to split_receipt_item_path(receipt_item.receipt.split, receipt_item),
+      <%= button_to split_receipt_item_path(receipt_item.split, receipt_item),
         method: :patch,
         params: { split_mode: "mine" },
         class: "rounded-full border-2 p-2 transition-all cursor-pointer #{receipt_item.mine? ? 'border-green-400 bg-green-900/20' : 'border-gray-600 bg-gray-800 hover:border-green-600 hover:bg-green-900/20'}" do %>
         <%= icon "hand_raised", css_class: "w-6 h-6 #{receipt_item.mine? ? 'text-green-400' : 'text-gray-400'}" %>
       <% end %>
 
-      <%= button_to split_receipt_item_path(receipt_item.receipt.split, receipt_item),
+      <%= button_to split_receipt_item_path(receipt_item.split, receipt_item),
         method: :patch,
         params: { split_mode: "shared" },
         class: "rounded-full border-2 p-2 transition-all cursor-pointer relative overflow-hidden #{receipt_item.shared? ? 'border-green-400' : 'border-gray-600 hover:border-yellow-600 hover:bg-yellow-900/20'}" do %>
