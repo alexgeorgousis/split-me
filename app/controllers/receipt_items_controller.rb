@@ -2,9 +2,6 @@ class ReceiptItemsController < ApplicationController
   before_action :set_split
   before_action :set_receipt_item
 
-  def show
-  end
-
   def update
     if @receipt_item.update(receipt_item_params)
       respond_to do |format|

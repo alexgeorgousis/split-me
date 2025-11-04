@@ -9,7 +9,7 @@ Rails.application.routes.draw do
     member do
       post :process_receipt
     end
-    resources :receipt_items do
+    resources :receipt_items, only: [ :update, :destroy ] do
       member do
         post :toggle_favourite
       end
